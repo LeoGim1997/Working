@@ -71,8 +71,6 @@ def gray_scale(img : np.array) -> np.array:
             p = l_matrix[0][i,j]+l_matrix[1][i,j]+l_matrix[2][i,j]
             img2[i,j] = 12.92*p if p <= 0.0031308 else (((p+0.055)/1.055))**(2.4)
     img_finale = np.ones((dim[0],dim[1],dim[2]+1))
-    for i in range(3):
-        img_finale[:,:,i] = img2
     return img_finale
 
 

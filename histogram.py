@@ -6,14 +6,17 @@ import numpy as np
 def img_histogram( img : np.array , nb_bins =100) -> np.array:
     '''
     Process the histogram of an 1 channel grayscale image
+    Return:
+        number (np.array) : occurences de chaque pixel
+        value (np.array) : valeur associé a chaque occurence
     '''
     dim = np.shape(img)
     ntotal = dim[0]*dim[1]
     if len(dim)>2: 
         raise ValueError(f'The dimension of img should be 2 and is {dim}')
     value = np.reshape(img,ntotal)
-    count,hist = np.histogram(value,bins=nb_bins)
-    return count,hist
+    number,value = np.histogram(value,bins=nb_bins)
+    return number,value
 
 def plot_histogram_mutichannel(img: np.array, nbins = 100):
     dim = np.shape(img)
@@ -27,10 +30,3 @@ def plot_histogram_mutichannel(img: np.array, nbins = 100):
         plt.ylabel('p(x)')
         plt.title(f'channel {c[i]}')
     plt.show()
-
-
-if __name__ == '__main__':
-    img = mpimg.imread('/Users/leogimenez/Desktop/git_depo_local/Working/image/lena_couleur.jpeg')
-    plot_histogram_mutichannel(img)
-
-   
