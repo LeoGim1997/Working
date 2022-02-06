@@ -14,7 +14,7 @@ def remove_channels(img : np.array , channels : int) -> np.array:
             img_c[i][j][channels] = 0
     return img_c
 
-def plot_channel():
+def plot_channel(img : np.array):
     plt.figure()
     for i in range(0,3):
         im = remove_channels(img,i)
