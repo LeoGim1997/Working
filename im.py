@@ -53,6 +53,40 @@ def integral_image_recursive_1channel(img : np.array) ->np.array:
             I[i,j] = img[i,j]+I[i,j-1]+I[i-1,j]-I[i-1,j-1]
     return I
 
+def gray_scale_conv_1channel(img : np.array , channel = 0) -> np.array:
+    img_1c = normalize(img[:,:,channel])
+    for row in img_1c:
+        for pixel in row:
+            if pixel<= 0.04045:
+                pixel = pixel/float(12.92)
+            if pixel > 0.04045:
+                pixel = ((pixel+0.055)/float(1.055))**(2.4)
+    return img_1c
+
+def gray_scale(img : np.array) -> np.array:
+    norm = [0.2126,0.7152,0.0722]
+    dim = np.shape(img)
+    img2 = np.zeros((dim[0],dim[1]))
+    l_matrix = [value*gray_scale_conv_1channel(img,channel) for channel,value in enumerate(norm) ]
+    for i in range(dim[0]):
+        for j in range(dim[1]):
+            p = l_matrix[0][i,j]+l_matrix[1][i,j]+l_matrix[2][i,j]
+            img2[i,j] = 12.92*p if p <= 0.0031308 else (((p+0.055)/1.055))**(2.4)
+    img_finale = np.ones((dim[0],dim[1],dim[2]+1))
+    for i in range(3):
+        img_finale[:,:,i] = img2
+    return img_finale
+
+
+   
+
+
+
+
+
+
+
+    
 
 
 
