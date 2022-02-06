@@ -1,8 +1,6 @@
-
-import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
-img = mpimg.imread('/Users/leogimenez/Desktop/git_depo_local/Working/image/lena_gray.gif')
+
 
 
 #Basic image processing
