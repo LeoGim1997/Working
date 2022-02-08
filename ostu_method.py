@@ -1,13 +1,10 @@
-from re import A
 import numpy as np
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
 from histogram import img_histogram
-from im import gray_scale
 
-
-def otsu_method(img : np.array) -> int:
+def otsu_method(img : np.array , return_hist = False) -> int:
     '''
     Cherche un seuil dans une image NxM (1 channel)
     Returns:
@@ -25,8 +22,8 @@ def otsu_method(img : np.array) -> int:
     maximum = 0.0
     vec = np.linspace(0,top-1,top)
     sum1 = np.dot(vec,number)
-    l_var = [0]
-    for i in range(0,top-1):
+    l_var = []
+    for i in range(0,top):
         wF = total - wB
         if wB and wF>0:
             mF = (sum1-sumB)/float(wF)
@@ -37,17 +34,40 @@ def otsu_method(img : np.array) -> int:
                 maximum = val
         wB = wB + number[i]
         sumB = sumB + (i-1)*number[i]
+    if return_hist:
+        return number,value,level,l_var
     return level,l_var
 
 
 def perform_ostu_threshold(img : np.array):
     img_c = np.copy(img)
-    level, l_var = otsu_method(img)
+    level, l_var = otsu_method(img,return_hist=False)
     for i,row in enumerate(img_c):
         for j,p in enumerate(row):
             p = 0 if p < level else 1
             img_c[i,j] = p
     return img_c
+
+def generate_graph(img : np.array):
+    number,value,level,l_var = otsu_method(img,return_hist=True)
+    number = np.concatenate((np.zeros(1),number),axis=0)
+    dim = np.shape(img)
+    fig, ax1 = plt.subplots()
+
+    color = 'tab:blue'
+    ax1.set_xlabel('Value')
+    ax1.set_ylabel('Occurences', color=color)
+    l1 = ax1.plot(value, number, color=color,label = 'Histogramme')
+    ax1.fill_between(value, number, alpha=1)
+    ax1.tick_params(axis='y', labelcolor=color)
+    ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
+
+    color = 'tab:red'
+    ax2.set_ylabel('variance', color=color)  # we already handled the x-label with ax1
+    l2 = ax2.plot(l_var, color=color,label='Variance')
+    ax2.tick_params(axis='y', labelcolor=color)
+    plt.show()
+
 
 
 def generate_final_img(img: np.array):
@@ -64,8 +84,5 @@ def generate_final_img(img: np.array):
     plt.imshow(img_threshold,cmap='gray')
     plt.title('Image seuil')
     plt.show()
-
-
-
 
 
