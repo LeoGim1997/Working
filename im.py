@@ -79,16 +79,19 @@ def fast_rgb2grey(img : np.array) ->np.array:
     else:
         return 0
 
-img = mpimg.imread('/Users/leogimenez/Desktop/git_depo_local/Working/image/image_folder/lena_couleur.jpeg')
-img_g = fast_rgb2grey(img)
-plt.imshow(img_g,cmap='gray')
-plt.show()
-
-   
-
-
-
-
+def rotating_image(img : np.array ,axis = 'horizontal' ) -> np.array:
+    img_rotate = np.copy(img)
+    dim  = np.shape(img)
+    center = int(dim[1]/2)
+    if axis == 'center':
+            for j in range(dim[1]):
+                img_rotate[:,j] = img[:,-j]  
+    if axis == 'horizontal':
+            for i in range(dim[0]):
+                img_rotate[i,:] = img[-i,:]  
+    if axis == 'diag':
+        img_rotate = rotating_image(rotating_image(img, axis='center'), axis='horizontal')
+    return img_rotate
 
 
 
