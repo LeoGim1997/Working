@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import matplotlib.image as mpimg
 
 
 #Basic image processing
@@ -73,6 +73,16 @@ def gray_scale(img : np.array) -> np.array:
     img_finale = np.ones((dim[0],dim[1],dim[2]+1))
     return img_finale
 
+def fast_rgb2grey(img : np.array) ->np.array:
+    if len(img.shape) is 3:
+        return np.dot(img[...,:3], [0.299, 0.587, 0.114])
+    else:
+        return 0
+
+img = mpimg.imread('/Users/leogimenez/Desktop/git_depo_local/Working/image/image_folder/lena_couleur.jpeg')
+img_g = fast_rgb2grey(img)
+plt.imshow(img_g,cmap='gray')
+plt.show()
 
    
 
