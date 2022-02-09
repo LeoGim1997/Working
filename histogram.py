@@ -30,3 +30,22 @@ def plot_histogram_mutichannel(img: np.array, nbins = 100):
         plt.ylabel('p(x)')
         plt.title(f'channel {c[i]}')
     plt.show()
+
+def plot_hist(img : np.array , nbins =256 ,show_im =False):
+    '''
+    1d hist of 1d-8bit image (grayscale or not)
+    '''
+    dim = np.shape(img)
+    ntotal = dim[0]*dim[1]
+    if show_im:
+        plt.figure()
+        plt.subplot(1,2,1)
+        plt.imshow(img,cmap='gray')
+        plt.subplot(1,2,2)
+        plt.hist(np.reshape(img,ntotal),bins=nbins,color='blue')
+        plt.show()
+    else:
+        plt.figure()
+        plt.hist(np.reshape(img,ntotal),bins=nbins,color='blue')
+        plt.show()
+    
