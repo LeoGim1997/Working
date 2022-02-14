@@ -74,7 +74,7 @@ def gray_scale(img : np.array) -> np.array:
     return img_finale
 
 def fast_rgb2grey(img : np.array) ->np.array:
-    if len(img.shape) is 3:
+    if len(img.shape) == 3:
         return np.dot(img[...,:3], [0.299, 0.587, 0.114])
     else:
         return 0
