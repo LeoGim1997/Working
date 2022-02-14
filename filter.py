@@ -1,4 +1,4 @@
-from function import gaussian_kernel_basis
+from function import gaussian_kernel
 import numpy as np
 
 def gaussian_blur(img : np.array ) -> np.array:
@@ -6,7 +6,7 @@ def gaussian_blur(img : np.array ) -> np.array:
     Apply a 7x7 gaussian blur on a img (default)
     on 1 channel of the input image
     '''
-    filter = gaussian_kernel_basis()
+    filter = gaussian_kernel(1)
     n,m = np.shape(img)
     #pad the image for fitting
     img_c = np.ones((n+3,m+3))
