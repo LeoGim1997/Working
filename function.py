@@ -53,7 +53,9 @@ def gaussian_kernel(sigma :float = 1)-> np.array:
     center_x = witdh*5//2
     center_y = witdh*5//2
     cut = witdh*5//5
-    kernel = gaussian_mat[center_x-cut-1:center_x+cut,center_y-cut:center_y+cut]
+    kernel = gaussian_mat[center_x-cut-1:center_x+cut,center_y-cut-1:center_y+cut]
+    scale_factor = 1/np.average(kernel)
+    kernel = scale_factor*kernel
     return kernel
 
 def plot_matrix(mat : np.array):
