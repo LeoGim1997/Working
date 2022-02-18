@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from filter import Sobel_2
 from im import remove_channels
-
 
 def plot_Sobel_processing(img : np.array, icmap: str = 'gray')-> np.array:
     G,Gx,Gy = Sobel_2(img)
