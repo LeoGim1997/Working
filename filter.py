@@ -1,5 +1,7 @@
 import numpy as np
+from function import gaussian_kernel
 from scipy.signal import convolve2d
+
 def gaussian_blur(img : np.array, sigma :float = 1 ,fill_pad = False) -> np.array:
     '''
     Apply a 7x7 gaussian blur on a img (default)
@@ -95,7 +97,6 @@ def normalized_sobel_filter(img : np.array , threshold : int = 0) -> np.array:
                 else:
                     img_f[i,j] = 300
     return img_f
-
 
 def Sobel_2(img: np.array) -> np.array:
     a1 = np.matrix([1, 2, 1])

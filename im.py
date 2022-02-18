@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.image as mpimg
-
+from filter import Sobel_2
 
 #Basic image processing
 def remove_channels(img : np.array , channels : int) -> np.array:
@@ -13,15 +13,6 @@ def remove_channels(img : np.array , channels : int) -> np.array:
         for j in range(height):
             img_c[i][j][channels] = 0
     return img_c
-
-def plot_channel(img : np.array):
-    plt.figure()
-    for i in range(0,3):
-        im = remove_channels(img,i)
-        plt.subplot(1,3,i+1)
-        plt.title(f'channel num {i}=0')
-        plt.imshow(im)
-    plt.show()
 
 
 def addition_component(img : np.array):
@@ -92,7 +83,6 @@ def rotating_image(img : np.array ,axis = 'horizontal' ) -> np.array:
     if axis == 'diag':
         img_rotate = rotating_image(rotating_image(img, axis='center'), axis='horizontal')
     return img_rotate
-
 
 
     

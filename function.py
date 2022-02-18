@@ -4,8 +4,9 @@ from random import gauss
 from turtle import width
 import numpy as np
 import matplotlib.pyplot as plt
-from filter import Sobel_2
-from scipy.signal import convolve2d
+import scipy
+from mpl_toolkits.mplot3d import Axes3D
+
 
 def gaussian_kernel_basis() -> np.array:
     '''
@@ -60,35 +61,6 @@ def gaussian_kernel(sigma :float = 1)-> np.array:
     kernel = scale_factor*kernel
     return kernel
 
-def plot_matrix(mat : np.array):
-    '''
-    Default settings for plotting a matrix of reasonable size
-    in case of large matrix better use imshow() from mpimp module
-    '''
-    fig, ax = plt.subplots()
-    ax.matshow(mat, cmap='viridis')
-    for (i, j), z in np.ndenumerate(mat):
-        ax.text(j, i, '{:0.01f}'.format(z), ha='center', va='center')
-    plt.show()
-
-
-def plot_2_image( img : np.array , img_processed : np.array , icmap = 'gray'):
-    plt.figure()
-    plt.subplot(1,2,1)
-    plt.imshow(img,cmap=icmap)
-    plt.subplot(1,2,2)
-    plt.imshow(img_processed , cmap= icmap)
-    plt.show()
-
-def plot_Sobel_processing(img : np.array, icmap: str = 'gray')-> np.array:
-    G,Gx,Gy = Sobel_2(img)
-    title = ['orginal image','Sobel filtered image','Gx gradient','Gy gradient']
-    plt.figure()
-    for c,(img,t) in enumerate(zip([img,G,Gx,Gy],title)):
-        plt.subplot(1,len(title),c+1)
-        plt.imshow(img,cmap = icmap)
-        plt.title(t)
-    plt.show()
 
 
 
