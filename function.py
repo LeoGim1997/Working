@@ -1,9 +1,11 @@
+import enum
 from math import sqrt,pi,floor
 from random import gauss
 from turtle import width
 import numpy as np
 import matplotlib.pyplot as plt
-
+from filter import Sobel_2
+from scipy.signal import convolve2d
 
 def gaussian_kernel_basis() -> np.array:
     '''
@@ -77,5 +79,22 @@ def plot_2_image( img : np.array , img_processed : np.array , icmap = 'gray'):
     plt.subplot(1,2,2)
     plt.imshow(img_processed , cmap= icmap)
     plt.show()
+
+def plot_Sobel_processing(img : np.array, icmap: str = 'gray')-> np.array:
+    G,Gx,Gy = Sobel_2(img)
+    title = ['orginal image','Sobel filtered image','Gx gradient','Gy gradient']
+    plt.figure()
+    for c,(img,t) in enumerate(zip([img,G,Gx,Gy],title)):
+        plt.subplot(1,len(title),c+1)
+        plt.imshow(img,cmap = icmap)
+        plt.title(t)
+    plt.show()
+
+
+
+
+
+
+
 
 

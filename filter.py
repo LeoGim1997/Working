@@ -1,4 +1,3 @@
-from function import gaussian_kernel, gaussian_kernel_basis
 import numpy as np
 from scipy.signal import convolve2d
 def gaussian_blur(img : np.array, sigma :float = 1 ,fill_pad = False) -> np.array:
@@ -108,4 +107,4 @@ def Sobel_2(img: np.array) -> np.array:
     Gx = convolve2d(img, Kx, "same", "symm")
     Gy = convolve2d(img, Ky, "same", "symm")
     G = np.abs(Gx) + np.abs(Gy)
-    return G
+    return G,Gx,Gy
