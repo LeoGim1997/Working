@@ -97,15 +97,3 @@ def normalized_sobel_filter(img : np.array , threshold : int = 0) -> np.array:
                 else:
                     img_f[i,j] = 300
     return img_f
-
-def Sobel_2(img: np.array) -> np.array:
-    a1 = np.matrix([1, 2, 1])
-    a2 = np.matrix([-1, 0, 1])
-    Kx = a1.T * a2
-    Ky = a2.T * a1
-
-    # Apply the Sobel operator
-    Gx = convolve2d(img, Kx, "same", "symm")
-    Gy = convolve2d(img, Ky, "same", "symm")
-    G = np.abs(Gx) + np.abs(Gy)
-    return G,Gx,Gy

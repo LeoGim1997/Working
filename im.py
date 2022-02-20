@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.image as mpimg
-from filter import Sobel_2
 
 #Basic image processing
 def remove_channels(img : np.array , channels : int) -> np.array:

@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from filter import Sobel_2
+from function import compute_gradient 
 from im import remove_channels
 
 def plot_Sobel_processing(img : np.array, icmap: str = 'gray')-> np.array:
-    G,Gx,Gy = Sobel_2(img)
+    G,Gx,Gy = compute_gradient(img,operator='Sobel',return_xy_gradient=True)
     title = ['orginal image','Sobel filtered image','Gx gradient','Gy gradient']
     plt.figure()
     for c,(img,t) in enumerate(zip([img,G,Gx,Gy],title)):
