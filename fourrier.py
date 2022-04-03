@@ -1,3 +1,6 @@
+from calendar import day_abbr
+from dataclasses import dataclass
+from typing import Optional
 from matplotlib.image import imread
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,7 +10,7 @@ from im import normalize
 from im import rotating_image
 
 
-def compute_DFT(x: np.array, inv=False) -> np.array:
+def compute_DFT(x: np.ndarray, inv: bool = False) -> np.ndarray:
     """Compute the Discrete Fourrier transform
     of a N-size 1-D signal array. \n
     dft[0] correspond to the DC components.
@@ -15,9 +18,10 @@ def compute_DFT(x: np.array, inv=False) -> np.array:
     dft[N/2+1:] correspond to negative frequencies.
 
     Args:
-        x (np.array) : discrete signal of size N.
+        x (array_like) : discrete signal of size N.
+        inv (Optional bool) : Is set to true, will invert the frequency vector init. Default to False.
     Returns:
-        dft (np.array) : dft of the signal with complex coefficients.
+        dft (ndarray) : dft of the signal with complex coefficients.
     """
     N = len(x)
     n = np.arange(N)
@@ -30,7 +34,7 @@ def compute_DFT(x: np.array, inv=False) -> np.array:
     return X
 
 
-def frequency_resolution(fs: float, fc: float, lenght_fft: int) -> np.array:
+def frequency_resolution(fs: float, fc: float, lenght_fft: int) -> np.ndarray:
     """Create a frequency vector for plotting.
     When computing DFT the returned DFT vectors is indexed by integers.
     For interpreting, we need to generate a frequency resolution
@@ -45,7 +49,7 @@ def frequency_resolution(fs: float, fc: float, lenght_fft: int) -> np.array:
     return step * np.linspace(0, lenght_fft, num=lenght_fft)
 
 
-def shift_frequencies(fs: float, f_samples: np.array) -> np.array:
+def shift_frequencies(fs: float, f_samples: np.ndarray) -> np.ndarray:
     """Shift the frequencies values for centering the spectrum around zero.
     before shifting the N/2 indexed values correspond to the
     Nyquist index.\\
@@ -66,7 +70,7 @@ def shift_frequencies(fs: float, f_samples: np.array) -> np.array:
     return f_shift
 
 
-def compute_dft_row(image: np.array, inv=False) -> np.array:
+def compute_dft_row(image: np.ndarray, inv=False) -> np.ndarray:
     """
     Apply DFT on every row of the input image.
     Will returns the complex horizontal fourrier coefficients
@@ -83,7 +87,7 @@ def compute_dft_row(image: np.array, inv=False) -> np.array:
     return dft_h
 
 
-def compute_dft_col(image: np.array, inv=False) -> np.array:
+def compute_dft_col(image: np.ndarray, inv=False) -> np.ndarray:
     """
     Apply DFT on every columns of the input image.
     Will returns the complex horizontal fourrier coefficients
@@ -100,10 +104,10 @@ def compute_dft_col(image: np.array, inv=False) -> np.array:
     return dft_h
 
 
-def compute_dft_image(image: np.array, inv=False) -> np.array:
+def compute_dft_image(image: np.ndarray, inv=False) -> np.ndarray:
     """
     Function to compute the 2-D DFT transform of the input
-    image. \\
+    image. \
     Args:
         image (np.array)
     Returns:
@@ -114,7 +118,7 @@ def compute_dft_image(image: np.array, inv=False) -> np.array:
     return dft_final
 
 
-def compute_cosinus(freq: float, t_final: float, amp=1) -> np.array:
+def compute_cosinus(freq: float, t_final: float, amp=1) -> np.ndarray:
     """Generate array values of a cosine signal observed between
     0 and t_final.
     The output signal will be of the form:\\
@@ -131,7 +135,7 @@ def compute_cosinus(freq: float, t_final: float, amp=1) -> np.array:
     return t, amp * np.cos(2 * np.pi * freq * t)
 
 
-def shift_frequency_row(image: np.array) -> np.array:
+def shift_frequency_row(image: np.ndarray) -> np.ndarray:
     N, M = np.shape(image)
     image_shifted = np.copy(image)
     if N % 2 == 0:
@@ -144,7 +148,7 @@ def shift_frequency_row(image: np.array) -> np.array:
     return image_shifted
 
 
-def shift_frequency_col(image: np.array) -> np.array:
+def shift_frequency_col(image: np.ndarray) -> np.ndarray:
     N, M = np.shape(image)
     image_shifted = np.copy(image)
     if M % 2 == 0:
@@ -157,7 +161,7 @@ def shift_frequency_col(image: np.array) -> np.array:
     return image_shifted
 
 
-def image_fftshift(dft_image: np.array) -> np.array:
+def image_fftshift(dft_image: np.ndarray) -> np.ndarray:
     """Performs the fft_shift of the image to get the corresponding
     centered spectrum.
         Args :
@@ -167,13 +171,13 @@ def image_fftshift(dft_image: np.array) -> np.array:
     return img
 
 
-def compute_DFT_inv(dft_image: np.array) -> np.array:
+def compute_DFT_inv(dft_image: np.ndarray) -> np.ndarray:
     N, M = np.shape(dft_image)
     norm = 1/float(N*M)
-    return np.abs(norm*compute_dft_image(dft_image, inv=True))
+    return rotating_image(np.real(norm*compute_dft_image(dft_image, inv=True)))
 
 
-def plot_dft_image(img: np.array, superpose: bool = False) -> None:
+def plot_dft_image(img: np.ndarray, superpose: bool = False) -> None:
     """Functions for plotting after 2D-DFT transform
     For a better visualisation of the results,
     the final image frequencies are shiffted and the module
@@ -206,3 +210,13 @@ def plot_dft_image(img: np.array, superpose: bool = False) -> None:
         plt.imshow(phase, cmap='gray')
         plt.title('Phase of the FT (rad)')
     plt.show()
+
+
+image = imread('/Users/leogimenez/Desktop/git_depo_local/Working/image/image_folder/Lena.jpeg')
+image_re = compute_DFT_inv(compute_dft_image(image))
+plt.figure()
+plt.subplot(1, 2, 1)
+plt.imshow(image)
+plt.subplot(1, 2, 2)
+plt.imshow(image_re)
+plt.show()
