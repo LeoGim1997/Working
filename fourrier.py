@@ -4,9 +4,10 @@ import matplotlib.pyplot as plt
 from pandas import array
 from PIL import Image
 from im import normalize
+from im import rotating_image
 
 
-def compute_DFT(x: np.array) -> np.array:
+def compute_DFT(x: np.array, inv=False) -> np.array:
     """Compute the Discrete Fourrier transform
     of a N-size 1-D signal array. \n
     dft[0] correspond to the DC components.
@@ -21,7 +22,10 @@ def compute_DFT(x: np.array) -> np.array:
     N = len(x)
     n = np.arange(N)
     k = n.reshape((N, 1))
-    e = np.exp(-2j * np.pi * k * n / N)
+    if inv:
+        e = np.exp(2j * np.pi * k * n / N)
+    else:
+        e = np.exp(-2j * np.pi * k * n / N)
     X = np.dot(e, x)
     return X
 
@@ -62,7 +66,7 @@ def shift_frequencies(fs: float, f_samples: np.array) -> np.array:
     return f_shift
 
 
-def compute_dft_row(image: np.array) -> np.array:
+def compute_dft_row(image: np.array, inv=False) -> np.array:
     """
     Apply DFT on every row of the input image.
     Will returns the complex horizontal fourrier coefficients
@@ -75,14 +79,11 @@ def compute_dft_row(image: np.array) -> np.array:
     N, M = np.shape(image)
     dft_h = np.zeros((N, M), dtype=complex)
     for i in range(N):
-        dft_h[i, :] = compute_DFT(image[i, :])
+        dft_h[i, :] = compute_DFT(image[i, :], inv)
     return dft_h
 
 
-np.setdiff1d
-
-
-def compute_dft_col(image: np.array) -> np.array:
+def compute_dft_col(image: np.array, inv=False) -> np.array:
     """
     Apply DFT on every columns of the input image.
     Will returns the complex horizontal fourrier coefficients
@@ -95,11 +96,11 @@ def compute_dft_col(image: np.array) -> np.array:
     N, M = np.shape(image)
     dft_h = np.zeros((N, M), dtype=complex)
     for i in range(M):
-        dft_h[:, i] = compute_DFT(image[:, i])
+        dft_h[:, i] = compute_DFT(image[:, i], inv=False)
     return dft_h
 
 
-def compute_dft_image(image: np.array) -> np.array:
+def compute_dft_image(image: np.array, inv=False) -> np.array:
     """
     Function to compute the 2-D DFT transform of the input
     image. \\
@@ -108,8 +109,8 @@ def compute_dft_image(image: np.array) -> np.array:
     Returns:
         dft_final (np.array): 2-D DFT image (complex values).
     """
-    dft = compute_dft_row(image)
-    dft_final = compute_dft_col(dft)
+    dft = compute_dft_row(image, inv)
+    dft_final = compute_dft_col(dft, inv)
     return dft_final
 
 
@@ -157,7 +158,8 @@ def shift_frequency_col(image: np.array) -> np.array:
 
 
 def image_fftshift(dft_image: np.array) -> np.array:
-    """Performs the fft_shift of the image to have
+    """Performs the fft_shift of the image to get the corresponding
+    centered spectrum.
         Args :
             dft_image (np.array) : 2-D DFT of an image
     """
@@ -168,29 +170,39 @@ def image_fftshift(dft_image: np.array) -> np.array:
 def compute_DFT_inv(dft_image: np.array) -> np.array:
     N, M = np.shape(dft_image)
     norm = 1/float(N*M)
-    return np.abs(norm*compute_dft_image(dft_image))
+    return np.abs(norm*compute_dft_image(dft_image, inv=True))
 
 
-def plot_dft_image(img: np.array) -> None:
+def plot_dft_image(img: np.array, superpose: bool = False) -> None:
     """Functions for plotting after 2D-DFT transform
     For a better visualisation of the results,
     the final image frequencies are shiffted and the module
     is plot in log scale.
     Args:
         img (np.array) : input image
+        superpose (bool) : If set to True, will returns the superposition of module and
+                    phase of the DFT image. Default to False.
+
     """
     tf_image = compute_dft_image(img)
-    a = compute_DFT_inv(img)
-    tf_image = image_fftshift(np.abs(tf_image))
+    module = np.abs(image_fftshift(tf_image))
+    phase = np.angle(image_fftshift(tf_image))
     plt.figure()
-    plt.subplot(1, 2, 1)
-    plt.imshow(img, cmap='gray')
-    plt.title('Original Image')
-    plt.subplot(1, 2, 2)
-    plt.imshow(a, cmap='gray')
-    plt.title('TF of the image')
+    if superpose:
+        plt.subplot(1, 2, 1)
+        plt.imshow(img, cmap='gray')
+        plt.title('Original Image')
+        plt.subplot(1, 2, 2)
+        plt.imshow(np.log(module)+phase, cmap='gray')
+        plt.title('FT Transform in log scale of Image')
+    else:
+        plt.subplot(1, 3, 1)
+        plt.imshow(img, cmap='gray')
+        plt.title('Original Image')
+        plt.subplot(1, 3, 2)
+        plt.imshow(np.log(module), cmap='gray')
+        plt.title('FT Transform in log scale of Image')
+        plt.subplot(1, 3, 3)
+        plt.imshow(phase, cmap='gray')
+        plt.title('Phase of the FT (rad)')
     plt.show()
-
-
-img = imread('/Users/leogimenez/Desktop/git_depo_local/Working/image/image_folder/Lena.jpeg')
-plot_dft_image(img)
