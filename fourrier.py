@@ -1,3 +1,4 @@
+from matplotlib.image import imread
 import numpy as np
 import matplotlib.pyplot as plt
 from pandas import array
@@ -35,7 +36,6 @@ def frequency_resolution(fs: float, fc: float, lenght_fft: int) -> np.array:
         fc (float): frequency of the carrier.
         lenght_fft (float): number of samples in DFT array.
     Returns:
-        fr (np.array): vector of frequencies.
     """
     step = (fs * fc) / lenght_fft
     return step * np.linspace(0, lenght_fft, num=lenght_fft)
@@ -77,6 +77,9 @@ def compute_dft_row(image: np.array) -> np.array:
     for i in range(N):
         dft_h[i, :] = compute_DFT(image[i, :])
     return dft_h
+
+
+np.setdiff1d
 
 
 def compute_dft_col(image: np.array) -> np.array:
@@ -131,7 +134,7 @@ def shift_frequency_row(image: np.array) -> np.array:
     N, M = np.shape(image)
     image_shifted = np.copy(image)
     if N % 2 == 0:
-        image_shifted[0:int(N / 2), :] = image[int(N / 2 + 1):, :]
+        image_shifted[0:int(N / 2), :] = image[int(N / 2):, :]
         image_shifted[int(N / 2) + 1:, :] = image[0:int(N / 2), :]
     else:
         image_shifted[:int(N / 2) + 1, :] = image[int(N / 2):]
@@ -143,13 +146,13 @@ def shift_frequency_row(image: np.array) -> np.array:
 def shift_frequency_col(image: np.array) -> np.array:
     N, M = np.shape(image)
     image_shifted = np.copy(image)
-    if N % 2 == 0:
-        image_shifted[:, 0:int(N / 2)] = image[:, int(N / 2 + 1):]
-        image_shifted[:, int(N / 2) + 1:] = image[:, 0:int(N / 2)]
+    if M % 2 == 0:
+        image_shifted[:, 0:int(M / 2)] = image[:, int(M / 2 + 1):]
+        image_shifted[:, int(M / 2) + 1:] = image[:, 0:int(M / 2)]
     else:
-        image_shifted[:, :int(N / 2) + 1] = image[:, int(N / 2):]
-        image_shifted[:, int(N / 2)] = image[:, 0]
-        image_shifted[:, int(N / 2) + 1:] = image[:, 0:int(N / 2)]
+        image_shifted[:, :int(M / 2) + 1] = image[:, int(M / 2):]
+        image_shifted[:, int(M / 2)] = image[:, 0]
+        image_shifted[:, int(M / 2) + 1:] = image[:, 0:int(M / 2)]
     return image_shifted
 
 
@@ -160,3 +163,34 @@ def image_fftshift(dft_image: np.array) -> np.array:
     """
     img = shift_frequency_col(shift_frequency_row(dft_image))
     return img
+
+
+def compute_DFT_inv(dft_image: np.array) -> np.array:
+    N, M = np.shape(dft_image)
+    norm = 1/float(N*M)
+    return np.abs(norm*compute_dft_image(dft_image))
+
+
+def plot_dft_image(img: np.array) -> None:
+    """Functions for plotting after 2D-DFT transform
+    For a better visualisation of the results,
+    the final image frequencies are shiffted and the module
+    is plot in log scale.
+    Args:
+        img (np.array) : input image
+    """
+    tf_image = compute_dft_image(img)
+    a = compute_DFT_inv(img)
+    tf_image = image_fftshift(np.abs(tf_image))
+    plt.figure()
+    plt.subplot(1, 2, 1)
+    plt.imshow(img, cmap='gray')
+    plt.title('Original Image')
+    plt.subplot(1, 2, 2)
+    plt.imshow(a, cmap='gray')
+    plt.title('TF of the image')
+    plt.show()
+
+
+img = imread('/Users/leogimenez/Desktop/git_depo_local/Working/image/image_folder/Lena.jpeg')
+plot_dft_image(img)
