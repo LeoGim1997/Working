@@ -210,13 +210,3 @@ def plot_dft_image(img: np.ndarray, superpose: bool = False) -> None:
         plt.imshow(phase, cmap='gray')
         plt.title('Phase of the FT (rad)')
     plt.show()
-
-
-image = imread('/Users/leogimenez/Desktop/git_depo_local/Working/image/image_folder/Lena.jpeg')
-image_re = compute_DFT_inv(compute_dft_image(image))
-plt.figure()
-plt.subplot(1, 2, 1)
-plt.imshow(image)
-plt.subplot(1, 2, 2)
-plt.imshow(image_re)
-plt.show()
