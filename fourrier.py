@@ -1,12 +1,5 @@
-from calendar import day_abbr
-from dataclasses import dataclass
-from typing import Optional
-from matplotlib.image import imread
 import numpy as np
 import matplotlib.pyplot as plt
-from pandas import array
-from PIL import Image
-from im import normalize
 from im import rotating_image
 
 
