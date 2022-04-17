@@ -17,21 +17,7 @@ def noise(image: np.array, noise_typ='s_p'):
         noisy = image + gauss
         return noisy
     elif noise_typ == "s_p":
-        s_vs_p = 0.5
-        amount = 0.004
-        out = np.copy(image)
-        # Salt mode
-        num_salt = np.ceil(amount * image.size * s_vs_p)
-        coords = [np.random.randint(0, i - 1, int(num_salt))
-                  for i in image.shape]
-        out[coords] = 1
-
-        # Pepper mode
-        num_pepper = np.ceil(amount * image.size * (1. - s_vs_p))
-        coords = [np.random.randint(0, i - 1, int(num_pepper))
-                  for i in image.shape]
-        out[coords] = 0
-        return out
+        return salt_and_peper_v2s(image, alpha=0.1)
     elif noise_typ == "poisson":
         vals = len(np.unique(image))
         vals = 2 ** np.ceil(np.log2(vals))
@@ -44,22 +30,15 @@ def noise(image: np.array, noise_typ='s_p'):
         return noisy
 
 
-def salt_and_peper_v1(img_input, bmin=300, bmax=100000):
-    """
-    More the range is wide more the noise is wide.
-    """
-
-    img = np.copy(img_input)
-    row, col = np.shape(img)
-    number_of_pixels = np.random.randint(bmin, bmax)
-    for i in range(number_of_pixels):
-        y_coord = np.random.randint(0, row-1)
-        x_coord = np.random.randint(0, col-1)
-        img[y_coord, x_coord] = 255
-
-    number_of_pixels = np.random.randint(bmin, bmax)
-    for i in range(number_of_pixels):
-        y_coord = np.random.randint(0, row-1)
-        x_coord = np.random.randint(0, col-1)
-        img[y_coord, x_coord] = 0
-    return img
+def salt_and_peper_v2s(img: np.array, alpha=0.005):
+    n, m = np.shape(img)
+    max = np.max(img)
+    img_final = np.copy(img)
+    img_noise = np.random.uniform(0, 1, (n, m))
+    for i in range(n):
+        for j in range(m):
+            if (img_noise[i, j] < alpha):
+                img_final[i, j] = 0
+            if (img_noise[i, j] < alpha/2) and (img_noise[i, j] <= alpha):
+                img_final[i, j] = max
+    return img_final
