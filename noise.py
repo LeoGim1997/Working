@@ -35,9 +35,9 @@ def salt_and_peper_noise(img: np.array, alpha=0.005):
     Generate a noisy image with a salt-paper noise with
     a percentage alpha of pixels affected.
     The affection of noise value is done as follow:
-        -Generation of a matrix M of same dimension as input matrix.\\
-        -M is filled with probability values from a uniform law.\\
-        -We note p(x) the probability of pixel x, and I(x) it intensity:\\
+        - Creatio of matrix M of same dimension as input matrix.\\
+        - M is filled with probability values from a uniform law.\\
+        - We note p(x) the probability of pixel x, and I(x) it intensity:\\
             if p(x) in [0,alpha[ then I(x) = 0.\\
             if p(x) in [alpha/2,alpha] then I(x) = Max(I) (Max intentisity of input image). \\
             if p(x) in ]alpha,1] then I(x) is unchanged.
