@@ -17,7 +17,7 @@ def noise(image: np.array, noise_typ='s_p'):
         noisy = image + gauss
         return noisy
     elif noise_typ == "s_p":
-        return salt_and_peper_v2s(image, alpha=0.1)
+        return salt_and_peper_noise(image, alpha=0.1)
     elif noise_typ == "poisson":
         vals = len(np.unique(image))
         vals = 2 ** np.ceil(np.log2(vals))
@@ -30,7 +30,23 @@ def noise(image: np.array, noise_typ='s_p'):
         return noisy
 
 
-def salt_and_peper_v2s(img: np.array, alpha=0.005):
+def salt_and_peper_noise(img: np.array, alpha=0.005):
+    """
+    Generate a noisy image with a salt-paper noise with
+    a percentage alpha of pixels affected.
+    The affection of noise value is done as follow:
+        -Generation of a matrix M of same dimension as input matrix.\\
+        -M is filled with probability values from a uniform law.\\
+        -We note p(x) the probability of pixel x, and I(x) it intensity:\\
+            if p(x) in [0,alpha[ then I(x) = 0.\\
+            if p(x) in [alpha/2,alpha] then I(x) = Max(I) (Max intentisity of input image). \\
+            if p(x) in ]alpha,1] then I(x) is unchanged.
+    Args:
+        img (np.array): input 1 channel grayscale image.
+        alpha (np.array): percentage of pixel affected by noise.
+    Returns:
+        img_final (np.array): Image noised.
+    """
     n, m = np.shape(img)
     max = np.max(img)
     img_final = np.copy(img)
