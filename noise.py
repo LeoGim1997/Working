@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
 
 def noise(image: np.array, noise_typ='s_p'):
@@ -56,7 +58,15 @@ def salt_and_peper_noise(img: np.array, alpha=0.8):
 
 
 def gaussian_noise(img: np.array, mean: float = 0, sigma: float = 1) -> np.array:
+    """
+    Generate an additive gaussian noise image with `mu`=mean and `std`=sigma.
+    Args:
+        img (np.array): input image of size n,m.
+        mean (float): mean of the gaussian distribution.
+        sigma (float): standard deviation of the gaussian distribution.
+    Returns:
+        gauss (np.array): gaussian noise samples matrix.
+    """
     n, m = np.shape(img)
     gauss = np.random.normal(mean, sigma, (n, m))
-    gauss = gauss.reshape(n, m)
     return gauss
