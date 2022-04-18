@@ -9,15 +9,10 @@ def noise(image: np.array, noise_typ='s_p'):
         row, col = np.shape(image)
         ch = 1
     if noise_typ == "gauss":
-        mean = 0
-        var = 0.1
-        sigma = var**0.5
-        gauss = np.random.normal(mean, sigma, (row, col, ch))
-        gauss = gauss.reshape(row, col, ch)
-        noisy = image + gauss
-        return noisy
+        gauss = gaussian_noise(image, 5, 14)
+        return image + gauss  # Additive noise
     elif noise_typ == "s_p":
-        return salt_and_peper_noise(image, alpha=0.1)
+        return salt_and_peper_noise(image, alpha=0.3)
     elif noise_typ == "poisson":
         vals = len(np.unique(image))
         vals = 2 ** np.ceil(np.log2(vals))
@@ -30,7 +25,7 @@ def noise(image: np.array, noise_typ='s_p'):
         return noisy
 
 
-def salt_and_peper_noise(img: np.array, alpha=0.005):
+def salt_and_peper_noise(img: np.array, alpha=0.8):
     """
     Generate a noisy image with a salt-paper noise with
     a percentage alpha of pixels affected.
@@ -58,3 +53,10 @@ def salt_and_peper_noise(img: np.array, alpha=0.005):
             if (img_noise[i, j] < alpha/2) and (img_noise[i, j] <= alpha):
                 img_final[i, j] = max
     return img_final
+
+
+def gaussian_noise(img: np.array, mean: float = 0, sigma: float = 1) -> np.array:
+    n, m = np.shape(img)
+    gauss = np.random.normal(mean, sigma, (n, m))
+    gauss = gauss.reshape(n, m)
+    return gauss
