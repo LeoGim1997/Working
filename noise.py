@@ -3,24 +3,24 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 
-def noise(image: np.array, noise_typ='s_p'):
+def noise(image: np.array, noise_type='s_p'):
 
     if len(np.shape(image)) == 3:
         row, col, ch = np.shape(image)
     else:
         row, col = np.shape(image)
         ch = 1
-    if noise_typ == "gauss":
+    if noise_type == "gauss":
         gauss = gaussian_noise(image, 5, 14)
         return image + gauss  # Additive noise
-    elif noise_typ == "s_p":
-        return salt_and_peper_noise(image, alpha=0.3)
-    elif noise_typ == "poisson":
+    elif noise_type == "s_p":
+        return salt_and_peper_noise(image, alpha=0.1)
+    elif noise_type == "poisson":
         vals = len(np.unique(image))
         vals = 2 ** np.ceil(np.log2(vals))
         noisy = np.random.poisson(image * vals) / float(vals)
         return noisy
-    elif noise_typ == "speckle":
+    elif noise_type == "speckle":
         gauss = np.random.randn(row, col, ch)
         gauss = gauss.reshape(row, col, ch)
         noisy = image + image * gauss
