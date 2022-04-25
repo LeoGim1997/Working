@@ -101,3 +101,18 @@ def normalized_sobel_filter(img: np.array, threshold: int = 0) -> np.array:
                 else:
                     img_f[i, j] = 300
     return img_f
+
+
+def median_filter(img: np.array, size: int = 7) -> np.array:
+    hw = size//2
+    # pad the image for fitting
+    img_c = image_padding(img, hw)
+    N, M = np.shape(img_c)
+    for i in range(hw, N-hw):
+        for j in range(hw, M-hw-1):
+            sub_matrix = img_c[i-hw:i+hw+1, j-hw:j+hw+1]
+            n, m = np.shape(sub_matrix)
+            sub_matrix = np.reshape(sub_matrix, (n*m, 1))
+            sub_matrix = sorted(sub_matrix)
+            img_c[i, j] = sub_matrix[hw]
+    return img_c[hw:-hw, hw:-hw]
