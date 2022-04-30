@@ -2,11 +2,13 @@ import pytest
 import os
 from pathlib import Path
 import sys
-sys.path.append(str(Path(__file__).parents[1]))
-from processing.noise import gaussian_noise  # noqa : E402
+import numpy as np
+sys.path.append(Path(__file__).parents[1].as_posix())
+from processing.noise import gaussian_noise
+from confest import lena_standard
 
 
 @pytest.mark.Noise
-@pytest.mark.parametrize("args", [{'mean': 0, 'sigma': 1}])
-def testGaussianNoise(args):
-    gaussian_noise(args)
+def testGaussianNoise(lena_standard):
+    noise = gaussian_noise(img=lena_standard, mean=0, sigma=1)
+    assert np.shape(noise) == np.shape(lena_standard)
