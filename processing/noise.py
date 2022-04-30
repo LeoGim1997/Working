@@ -27,7 +27,7 @@ def noise(image: np.array, noise_typ='s_p'):
         return noisy
 
 
-def salt_noise(img: np.array, alpha=0.8):
+def salt_and_peper_noise(*args, **kwargs):
     """
     Generate a noisy image with a salt-paper noise with
     a percentage alpha of pixels affected.
@@ -44,6 +44,8 @@ def salt_noise(img: np.array, alpha=0.8):
     Returns:
         img_final (np.array): Image noised.
     """
+    img = args[0]
+    alpha = kwargs.get('alpha', 0.8)
     n, m = np.shape(img)
     max = np.max(img)
     img_final = np.copy(img)
@@ -57,7 +59,7 @@ def salt_noise(img: np.array, alpha=0.8):
     return img_final
 
 
-def gaussian_noise(img: np.array, **kwargs) -> np.array:
+def gaussian_noise(*args, **kwargs) -> np.array:
     """
     Generate an additive gaussian noise image with `mu`=mean and `std`=sigma.
     Args:
@@ -67,6 +69,7 @@ def gaussian_noise(img: np.array, **kwargs) -> np.array:
     Returns:
         gauss (np.array): gaussian noise samples matrix.
     """
+    img = args[0]
     mean, sigma = kwargs.get('mean', 0), kwargs.get('sigma', 1)
     n, m = np.shape(img)
     gauss = np.random.normal(mean, sigma, (n, m))

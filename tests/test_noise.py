@@ -10,5 +10,5 @@ from processing.noise import gaussian_noise, noise
 
 @pytest.mark.Noise
 def testGaussianNoise(lena_standard):
-    noise = gaussian_noise(img=lena_standard, mean=0, sigma=1)
+    noise = gaussian_noise(lena_standard, mean=0, sigma=1)
     assert np.shape(noise) == np.shape(lena_standard)
