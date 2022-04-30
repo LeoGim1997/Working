@@ -57,7 +57,7 @@ def salt_noise(img: np.array, alpha=0.8):
     return img_final
 
 
-def gaussian_noise(img: np.array, mean: float = 0, sigma: float = 1) -> np.array:
+def gaussian_noise(img: np.array, **kwargs) -> np.array:
     """
     Generate an additive gaussian noise image with `mu`=mean and `std`=sigma.
     Args:
@@ -67,6 +67,7 @@ def gaussian_noise(img: np.array, mean: float = 0, sigma: float = 1) -> np.array
     Returns:
         gauss (np.array): gaussian noise samples matrix.
     """
+    mean, sigma = kwargs.get('mean', 0), kwargs.get('sigma', 1)
     n, m = np.shape(img)
     gauss = np.random.normal(mean, sigma, (n, m))
     return gauss
