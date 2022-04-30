@@ -27,7 +27,7 @@ def noise(image: np.array, noise_typ='s_p'):
         return noisy
 
 
-def salt_and_peper_noise(img: np.array, alpha=0.8):
+def salt_noise(img: np.array, alpha=0.8):
     """
     Generate a noisy image with a salt-paper noise with
     a percentage alpha of pixels affected.
@@ -52,7 +52,7 @@ def salt_and_peper_noise(img: np.array, alpha=0.8):
         for j in range(m):
             if (img_noise[i, j] < alpha):
                 img_final[i, j] = 0
-            if (img_noise[i, j] < alpha/2) and (img_noise[i, j] <= alpha):
+            if (img_noise[i, j] < alpha / 2) and (img_noise[i, j] <= alpha):
                 img_final[i, j] = max
     return img_final
 
