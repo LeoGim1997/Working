@@ -32,7 +32,7 @@ def salt_and_peper_noise(*args, **kwargs):
     Generate a noisy image with a salt-paper noise with
     a percentage alpha of pixels affected.
     The affection of noise value is done as follow:
-        - Creatio of matrix M of same dimension as input matrix.\\
+        - Creation of matrix M of same dimension as input matrix.\\
         - M is filled with probability values from a uniform law.\\
         - We note p(x) the probability of pixel x, and I(x) it intensity:\\
             if p(x) in [0,alpha[ then I(x) = 0.\\
