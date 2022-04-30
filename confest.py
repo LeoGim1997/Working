@@ -1,3 +1,1 @@
-
-def test_image():
-    pass
+# Generate Image for testing
