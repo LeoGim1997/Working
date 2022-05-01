@@ -14,10 +14,10 @@ seam_mat[0, :] = img_g[0, :]
 for i in range(1, n):
     for j in range(m):
         if j == 0:
-            if seam_mat[i - 1, j] < seam_mat[i - 1, j]:
+            if seam_mat[i - 1, j] < seam_mat[i - 1, j + 1]:
                 seam_mat[i, j] += seam_mat[i - 1, j]
             else:
-                seam_mat[i, 0] += seam_mat[i - 1, 1]
+                seam_mat[i, 0] += seam_mat[i - 1, j + 1]
         elif j == m - 1:
             if seam_mat[i - 1, -1] < seam_mat[i - 1, -2]:
                 seam_mat[i, j] += seam_mat[i - 1, -1]
