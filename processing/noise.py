@@ -40,7 +40,7 @@ def salt_and_peper_noise(*args, **kwargs):
             if p(x) in ]alpha,1] then I(x) is unchanged.
     Args:
         img (np.array): input 1 channel grayscale image.
-        alpha (np.array): percentage of pixel affected by noise.
+        alpha (np.array): percentage of pixel affected by noise. Default to 0.8.
     Returns:
         img_final (np.array): Image noised.
     """
@@ -64,8 +64,8 @@ def gaussian_noise(*args, **kwargs) -> np.array:
     Generate an additive gaussian noise image with `mu`=mean and `std`=sigma.
     Args:
         img (np.array): input image of size n,m.
-        mean (float): mean of the gaussian distribution.
-        sigma (float): standard deviation of the gaussian distribution.
+        mean (float): mean of the gaussian distribution. Default to `0`.
+        sigma (float): standard deviation of the gaussian distribution. Default to `1`.
     Returns:
         gauss (np.array): gaussian noise samples matrix.
     """
