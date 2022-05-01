@@ -27,12 +27,12 @@ def noise(image: np.array, noise_typ='s_p'):
         return noisy
 
 
-def salt_noise(img: np.array, alpha=0.8):
+def salt_and_peper_noise(*args, **kwargs):
     """
     Generate a noisy image with a salt-paper noise with
     a percentage alpha of pixels affected.
     The affection of noise value is done as follow:
-        - Creatio of matrix M of same dimension as input matrix.\\
+        - Creation of matrix M of same dimension as input matrix.\\
         - M is filled with probability values from a uniform law.\\
         - We note p(x) the probability of pixel x, and I(x) it intensity:\\
             if p(x) in [0,alpha[ then I(x) = 0.\\
@@ -40,10 +40,12 @@ def salt_noise(img: np.array, alpha=0.8):
             if p(x) in ]alpha,1] then I(x) is unchanged.
     Args:
         img (np.array): input 1 channel grayscale image.
-        alpha (np.array): percentage of pixel affected by noise.
+        alpha (np.array): percentage of pixel affected by noise. Default to 0.8.
     Returns:
         img_final (np.array): Image noised.
     """
+    img = args[0]
+    alpha = kwargs.get('alpha', 0.8)
     n, m = np.shape(img)
     max = np.max(img)
     img_final = np.copy(img)
@@ -57,16 +59,17 @@ def salt_noise(img: np.array, alpha=0.8):
     return img_final
 
 
-def gaussian_noise(img: np.array, **kwargs) -> np.array:
+def gaussian_noise(*args, **kwargs) -> np.array:
     """
     Generate an additive gaussian noise image with `mu`=mean and `std`=sigma.
     Args:
         img (np.array): input image of size n,m.
-        mean (float): mean of the gaussian distribution.
-        sigma (float): standard deviation of the gaussian distribution.
+        mean (float): mean of the gaussian distribution. Default to `0`.
+        sigma (float): standard deviation of the gaussian distribution. Default to `1`.
     Returns:
         gauss (np.array): gaussian noise samples matrix.
     """
+    img = args[0]
     mean, sigma = kwargs.get('mean', 0), kwargs.get('sigma', 1)
     n, m = np.shape(img)
     gauss = np.random.normal(mean, sigma, (n, m))
