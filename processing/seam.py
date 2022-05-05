@@ -6,7 +6,7 @@ from im import fast_rgb2grey
 from function import compute_gradient
 
 img = plt.imread('/Users/leogimenez/Desktop/git_depo_local/Working/image/image_folder/tower.png')
-img_g = compute_gradient(fast_rgb2grey(img))
+img_g = compute_gradient(fast_rgb2grey(img), operator='Robert')
 
 
 def compute_energy(img_g: np.array) -> np.array:
@@ -32,22 +32,22 @@ def compute_energy(img_g: np.array) -> np.array:
     return seam_mat
 
 
-seam = compute_energy(img_g)
-
-
 def compute_path(seam, index):
-    neighbor = seam[:, index - 1:index + 2]
     n, m = np.shape(seam)
     path_coor = []
+    neighbor = seam[-1, index - 1:index + 2]
     for i in np.arange(-2, -n + 1, -1):
-        pixel_coor = np.argmin(neighbor[i])
+        pixel_coor, value = np.argmin(neighbor[i]), np.min(neighbor[i])
+
         path_coor.append((i, index - (pixel_coor - 1)))
+        new_index = list(seam[i, :]).index(value)
+        neighbor = seam[i, new_index - 1:new_index + 2]
     return path_coor
 
 
 def compute_all_path(seam: np.array, tshld: int) -> dict:
     last_line = list(seam[-1, :])
-    l_index = list(map(lambda x: last_line.index(x) if x < tshld else None, last_line))
+    l_index = map(lambda x: last_line.index(x) if x < tshld else None, last_line)
 
     dict_final = dict()
     for c, index in enumerate(l_index):
@@ -55,3 +55,21 @@ def compute_all_path(seam: np.array, tshld: int) -> dict:
             continue
         dict_final.update({index: compute_path(seam, index)})
     return dict_final
+
+
+def show_all_path(img_g: np.array, tshld: int) -> None:
+    seam = compute_energy(img_g)
+    n, m = np.shape(img_g)
+    img_final = np.zeros((n, m))
+    last_line = list(seam[-1, :])
+    dict_path = compute_all_path(seam, tshld)
+    for k, path in dict_path.items():
+        for coor in path:
+            x, y = coor[0], coor[1]
+            img_final[x, y] = 1
+    return img_final
+
+
+mat = show_all_path(img_g, 31)
+plt.imshow(mat)
+plt.show()
