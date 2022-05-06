@@ -14,7 +14,7 @@ def lena_standard():
     return mpimg.imread(img.as_posix())
 
 
-# @pytest.fixture(scope="session")
+@pytest.fixture(scope="session")
 def simple_path():
     np.random.seed(5)
     size_row = 101
@@ -32,8 +32,3 @@ def simple_path():
             row[origin - (incr + 1)] = 1
             origin = origin - (incr + 1)
     return mat
-
-
-mat = simple_path()
-plt.imshow(mat)
-plt.show()
