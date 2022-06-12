@@ -119,7 +119,7 @@ def compute_cosinus(freq: float, t_final: float, amp=1) -> np.ndarray:
     Args:
         freq (float): desired frequency.
         t_final (float): final time of the observation.
-        amp (float): Amplitude of the signal.
+        amp (Optional-float): Default to 1. Amplitude of the signal.
     Returns:
         signal (np.array): cosinus array.
     """
@@ -166,8 +166,8 @@ def image_fftshift(dft_image: np.ndarray) -> np.ndarray:
 
 def compute_DFT_inv(dft_image: np.ndarray) -> np.ndarray:
     N, M = np.shape(dft_image)
-    norm = 1/float(N*M)
-    return rotating_image(np.real(norm*compute_dft_image(dft_image, inv=True)))
+    norm = 1 / float(N * M)
+    return rotating_image(np.real(norm * compute_dft_image(dft_image, inv=True)))
 
 
 def plot_dft_image(img: np.ndarray, superpose: bool = False) -> None:
@@ -190,7 +190,7 @@ def plot_dft_image(img: np.ndarray, superpose: bool = False) -> None:
         plt.imshow(img, cmap='gray')
         plt.title('Original Image')
         plt.subplot(1, 2, 2)
-        plt.imshow(np.log(module)+phase, cmap='gray')
+        plt.imshow(np.log(module) + phase, cmap='gray')
         plt.title('FT Transform in log scale of Image')
     else:
         plt.subplot(1, 3, 1)
