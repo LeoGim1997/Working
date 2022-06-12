@@ -2,6 +2,32 @@ import numpy as np
 from typing import Iterable, Tuple
 
 
+def truncate(x: Iterable, bound=None):
+    """Truncate function
+    Allows the truncation on specified bound.
+
+    Parameters
+    ----------
+    x : Iterable
+        input value to truncate.
+    bound: Optional-tuple : Bound for the truncation.
+
+    Returns
+    -------
+    xf : array_like
+        truncated value of the input x.
+    """
+    if bound is None:
+        return x
+    if len(bound) != 2:
+        raise ValueError('Both min&max must be specified.')
+    if bound[0] > bound[1]:
+        raise ValueError(f'Wrong order for bound spec {bound[0]} >{bound[1]}.')
+    mi, ma = bound
+    xf = [e for e in x if e >= mi or e <= ma]
+    return np.array(xf)
+
+
 def rectIntegral(x: Iterable, y: Iterable, bound: Tuple[float, float] = None) -> float:
     """Rectangle method for integral.
     Compute the integral approximation of a function using

@@ -11,6 +11,15 @@ def vector(xo, xn, n):
     return x
 
 
+def line(xo, xn, n):
+    """
+    Returns a line for UT.
+    """
+    x = np.linspace(xo, xn, n)
+    y = np.ones(n)
+    return x, y
+
+
 @pytest.mark.Num
 @pytest.mark.parametrize('xparams', [(0, 1, 100)])
 @pytest.mark.parametrize('yparams', [(0, 1, 100)])
@@ -29,7 +38,7 @@ def test_different_len(xparams, yparams):
     y = vector(*yparams)
     with pytest.raises(ValueError,
                        match='x and y are not the same size.'):
-        result = rectIntegral(x, y)
+        rectIntegral(x, y)
 
 
 @pytest.mark.Num
@@ -40,4 +49,12 @@ def test_wrong_bound(params, bound):
     with pytest.raises(ValueError,
                        match='function is not defined ' +
                        'on the specified bound.'):
-        result = rectIntegral(x, x, bound=bound)
+        rectIntegral(x, x, bound=bound)
+
+
+@pytest.mark.Num
+@pytest.mark.parametrize('params', [(0, 5, 100)])
+def test_line(params):
+    x, y = line(*params)
+    result = rectIntegral(x, y)
+    assert result == 5.0
