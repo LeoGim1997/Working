@@ -2,7 +2,7 @@ import numpy as np
 from typing import Iterable, Tuple
 
 
-def rect(x: Iterable, y: Iterable, bound: Tuple[float, float] = None) -> float:
+def rectIntegral(x: Iterable, y: Iterable, bound: Tuple[float, float] = None) -> float:
     """Rectangle method for integral.
     Compute the integral approximation of a function using
     rectangle method.
@@ -34,11 +34,11 @@ def rect(x: Iterable, y: Iterable, bound: Tuple[float, float] = None) -> float:
         method approach to compute the integral.
     """
     if len(x) != len(y):
-        raise ValueError(f'x and y are not the same size.')
+        raise ValueError('x and y are not the same size.')
     if bound is not None:
         for v in bound:
             if (x[0] > v) or (x[-1] < v):
-                raise ValueError(f'function is not defined on' +
+                raise ValueError('function is not defined on ' +
                                  'the specified bound.')
     n = len(x)
     integeral = 0
@@ -48,7 +48,7 @@ def rect(x: Iterable, y: Iterable, bound: Tuple[float, float] = None) -> float:
 
 
 def trap(x: Iterable, y: Iterable, bound: Tuple[float, float] = None) -> float:
-    """Rectangle mehod for integral.
+    """Trapeze mehod for integral.
 
     Compute the integral approximation of a function using
     trapeze method.
