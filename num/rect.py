@@ -2,6 +2,38 @@ import numpy as np
 from typing import Iterable, Tuple
 
 
+def square(wd, center, domain: Tuple[int]) -> np.array:
+    """Create a square function.
+    Allows to generate a square function
+    of specified width center on a specific point.
+    Function values will be 1 inside the square and
+    0 elsewhere.
+
+    Parameters
+    ----------
+    wd: int
+        Width of the square.
+    center: int
+        Value where the square is center.
+    domain: Tuple
+        definition domain for the function
+    Returns
+    -------
+    x : ArrayLike
+        values of the x-axis
+    y: ArrayLike
+        values of the y-axis
+    """
+    lb, ub = center - wd / 2, center + wd / 2
+    if lb <= domain[0]:
+        raise ValueError('Lower bound not in domain.')
+    if ub >= domain[1]:
+        raise ValueError('Upper bound not in domain.')
+    x = np.linspace(domain[0], domain[1], endpoint=True)
+    y = [1 if e >= lb and e <= ub else 0 for e in x]
+    return x, np.array(y)
+
+
 def truncate(x: Iterable, bound=None):
     """Truncate function
     Allows the truncation on specified bound.

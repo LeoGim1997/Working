@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 import numpy as np
 sys.path.append(Path(__file__).parents[1].as_posix())
-from num.rect import rectIntegral, trap
+from num.rect import rectIntegral, trap, square
 
 
 def vector(xo, xn, n):
@@ -58,3 +58,24 @@ def test_line(params):
     x, y = line(*params)
     result = rectIntegral(x, y)
     assert result == 5.0
+
+
+@pytest.mark.parametrize('input', [(2, 1, (-5, 8))])
+def test_square(input):
+    x, y = square(*input)
+    assert isinstance(x, (np.ndarray, np.generic))
+    assert isinstance(y, (np.ndarray, np.generic))
+
+
+@pytest.mark.parametrize('input', [(2, 1, (-1, 8))])
+def test_square_result(input):
+    x, y = square(*input)
+    result = rectIntegral(x, y)
+    assert result == pytest.approx(2, 0.1)
+
+
+@pytest.mark.parametrize('input', [(100, 4, (-8, 8))])
+def test_square_exception(input):
+    with pytest.raises(ValueError,
+                       match='Lower bound not in domain.'):
+        x, y = square(*input)
