@@ -51,8 +51,14 @@ def tchebychevOrdre2(w, n, wc=1, eps=1) -> float:
 
 
 def get_response(*arg, order=1):
+    params = arg[1:][0]
+    wvec = arg[0]
+    if np.shape(arg[0])[0] == 0:
+        print(f'Wrong input for w vectors')
+        return False
     if order == 1:
         filter = tchebychevOrdre1
     if order == 2:
         filter = tchebychevOrdre2
-    # TODO : Continue to implement
+    response = [filter(w, *params) for w in wvec]
+    return np.array(response)
