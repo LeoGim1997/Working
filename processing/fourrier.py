@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from im import rotating_image
+from processing.im import rotating_image
+from typing import Tuple
 
 
 def compute_DFT(x: np.ndarray, inv: bool = False) -> np.ndarray:
@@ -111,7 +112,7 @@ def compute_dft_image(image: np.ndarray, inv=False) -> np.ndarray:
     return dft_final
 
 
-def compute_cosinus(freq: float, t_final: float, amp=1) -> np.ndarray:
+def compute_cosinus(freq: float, t_final: float, amp=1, nsamples=None) -> Tuple[np.ndarray, np.ndarray]:
     """Generate array values of a cosine signal observed between
     0 and t_final.
     The output signal will be of the form:\\
@@ -120,11 +121,17 @@ def compute_cosinus(freq: float, t_final: float, amp=1) -> np.ndarray:
         freq (float): desired frequency.
         t_final (float): final time of the observation.
         amp (float): Amplitude of the signal.
+        step (Optional-int): When not None, specify the number of samples
+            between 0 and t_final.
     Returns:
+        t (np.array): the time array.
         signal (np.array): cosinus array.
     """
-    step = 1. / float(30 * freq)
-    t = np.arange(0, t_final, step)
+    if nsamples:
+        t = np.linspace(0, t_final, nsamples)
+    else:
+        step = 1. / float(10 * freq)
+        t = np.arange(0, t_final, step)
     return t, amp * np.cos(2 * np.pi * freq * t)
 
 
@@ -166,8 +173,8 @@ def image_fftshift(dft_image: np.ndarray) -> np.ndarray:
 
 def compute_DFT_inv(dft_image: np.ndarray) -> np.ndarray:
     N, M = np.shape(dft_image)
-    norm = 1/float(N*M)
-    return rotating_image(np.real(norm*compute_dft_image(dft_image, inv=True)))
+    norm = 1 / float(N * M)
+    return rotating_image(np.real(norm * compute_dft_image(dft_image, inv=True)))
 
 
 def plot_dft_image(img: np.ndarray, superpose: bool = False) -> None:
@@ -190,7 +197,7 @@ def plot_dft_image(img: np.ndarray, superpose: bool = False) -> None:
         plt.imshow(img, cmap='gray')
         plt.title('Original Image')
         plt.subplot(1, 2, 2)
-        plt.imshow(np.log(module)+phase, cmap='gray')
+        plt.imshow(np.log(module) + phase, cmap='gray')
         plt.title('FT Transform in log scale of Image')
     else:
         plt.subplot(1, 3, 1)
