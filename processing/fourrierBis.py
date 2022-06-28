@@ -5,7 +5,7 @@ sys.path.append(Path(__file__).parents[1].resolve().as_posix())
 from processing.fourrier import compute_DFT
 
 
-def fft(x: np.array):
+def fft(x: np.array) -> np.array:
 
     if len(np.shape(x)) > 1 and isinstance(x, (np.generic, np.ndarray)):
         x = np.reshape(x, (x.shape[0],))
@@ -23,7 +23,7 @@ def fft(x: np.array):
                                X_even + terms[int(N / 2):] * X_odd])
 
 
-def fft_v(x,):
+def fft_v(x) -> np.array:
     x = np.asarray(x, dtype=float)
     N = x.shape[0]
     if np.log2(N) % 1 > 0:
