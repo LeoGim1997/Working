@@ -3,8 +3,7 @@ from math import floor
 from im import MyImage
 from typing import Iterable
 import matplotlib.pyplot as plt
-
-
+from scipy.signal import convolve2d
 Matrix = Iterable[Iterable[float]]
 Vector = Iterable[float]
 
@@ -92,3 +91,32 @@ def gaussian_kernel(std: float = 1, threshold: float = None, sf=None) -> Matrix:
         if sf is not None:
             return scale_factor * kernel
         return kernel
+
+
+def laplacianOfGaussian(std: float = 1,
+                        min: int = -3,
+                        max: int = 3,
+                        n_samples: int = 50,
+                        threshold: float = None) -> Matrix:
+    """Compute the Laplacian of gaussian.
+    This function creates a LoG mask (matrix where values
+    correpond to the laplacian of the gaussian mask.)
+    """
+    args = (std, min, max, n_samples)
+    x = gaussian_sample(*args)
+    y = x
+    if threshold is not None:
+        x = x[x[:, 0] > threshold, :]
+        y = x
+    else:
+        y = x
+    mat1 = (x + y - 2 * std**2) / std**4
+    mat2 = np.dot(x, y.T)
+
+    return mat2 * mat1.T
+
+
+a = laplacianOfGaussian(threshold=0)
+b = MyImage('lena').get_matrix()
+c = convolve2d(b, a, "same", "symm")
+MyImage.show(np.abs(c))
