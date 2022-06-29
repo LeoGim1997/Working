@@ -1,18 +1,23 @@
 import numpy as np
 from math import floor
-import matplotlib.pyplot as plt
 from im import MyImage
-from scipy import signal
+from typing import Iterable
+
+Matrix = Iterable[Iterable[float]]
+Vector = Iterable[float]
+
+SQRT_PI = np.sqrt(2 * np.pi)
+def CG(s): return 1 / (SQRT_PI * s)
 
 
-def gaussian_sample(sigma: float = 1,
+def gaussian_sample(std: float = 1,
                     min: int = -3,
                     max: int = 3,
-                    n_samples: int = 50) -> np.array:
+                    n_samples: int = 50) -> Vector:
     '''
     Return a 1-d Gaussian array of std sigma
     '''
-    coeff = 1 / np.sqrt(sigma**2)
+    coeff = 1 / np.sqrt(std**2)
     coeff_pi = coeff / np.sqrt(2 * np.pi)
 
     x = np.linspace(min, max, n_samples)
@@ -46,3 +51,35 @@ def gaussian_kernel(sigma: float = 1) -> np.array:
     scale_factor = 1 / np.average(kernel)
     kernel = scale_factor * kernel
     return kernel
+
+
+def gaussian_kernelv2(std: float = 1, threshold=None) -> Matrix:
+    if std < 0:
+        raise ValueError('The std cannot be negative')
+    # haldf-witdh of the filter
+    h_w = floor(std) * 3
+    w = 2 * h_w + 1
+    # w*5 : allows to add more points to the mesh grid
+    def gauss(): return gaussian_sample(std, -w, w, w * 5)
+    x, y = gauss(), gauss()
+    m = np.dot(x, y.T)
+
+    # get only usefull values inside [-3*std,3*std]
+    # if threshold is set to None (default)
+    if threshold is None:
+        c_x = w * 5 // 2
+        c_y = w * 5 // 2
+        cut = w * 5 // 5
+        kernel = m[c_x - cut:c_x + cut + 1, c_y - cut:c_y + cut + 1]
+        scale_factor = 1 / np.average(kernel)
+        kernel = scale_factor * kernel
+        return kernel
+
+    kernel = m[m[...] < threshold]
+    scale_factor = 1 / np.average(kernel)
+    kernel = scale_factor * kernel
+    return kernel
+
+
+a = gaussian_kernelv2(5)
+MyImage.show(a)
