@@ -1,8 +1,6 @@
 import numpy as np
 from math import floor
-from im import MyImage
 from typing import Iterable
-import matplotlib.pyplot as plt
 from scipy.signal import convolve2d
 
 
