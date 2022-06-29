@@ -89,6 +89,7 @@ def gaussian_kernel(std: float = 1, threshold: float = None, sf=None) -> Matrix:
         y = x
         kernel = np.dot(x, y.T)
         if sf is not None:
+            scale_factor = 1 / np.average(kernel)
             return scale_factor * kernel
         return kernel
 
@@ -110,13 +111,15 @@ def laplacianOfGaussian(std: float = 1,
         y = x
     else:
         y = x
-    mat1 = (x + y - 2 * std**2) / std**4
-    mat2 = np.dot(x, y.T)
+    mat = np.dot(x, y.T)
+    # gradient convolutive kernel
+    gKernel = np.array([[0, 1, 0], [1, -4, 1], [0, 1, 0]])
+    kernel = convolve2d(mat, gKernel, "same", "symm")
+    return kernel / np.sum(kernel)
 
-    return mat2 * mat1.T
 
-
-a = laplacianOfGaussian(threshold=0)
-b = MyImage('lena').get_matrix()
+# TODO : Corriger les bords qui tremblent lorsqu'on passe en module
+a = laplacianOfGaussian(std=0.3)
+b = MyImage('lena').get_matrix('maison')
 c = convolve2d(b, a, "same", "symm")
-MyImage.show(np.abs(c))
+MyImage.show_compare(b, c)
