@@ -97,9 +97,11 @@ class MyImage:
         self.name = name
 
     def get_matrix(self, image='lena'):
-        dirImage = Path(__file__).parents[1]
+        dirImage = Path(__file__).parents[1] / 'image_folder'
         if image == 'lena':
-            path = dirImage / 'image_folder/lena.jpeg'
+            path = dirImage / 'lena.jpeg'
+        if image == 'maison':
+            path = dirImage / 'maison_alsacienne.jpeg'
             if not path.exists():
                 raise FileExistsError(f'Image {path.as_posix()}')
             return mpimg.imread(path.resolve().as_posix())
