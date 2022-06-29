@@ -2,26 +2,39 @@ import numpy as np
 from math import floor
 from im import MyImage
 from typing import Iterable
+import matplotlib.pyplot as plt
+
 
 Matrix = Iterable[Iterable[float]]
 Vector = Iterable[float]
 
 SQRT_PI = np.sqrt(2 * np.pi)
-def CG(s): return 1 / (SQRT_PI * s)
+def CG(s: float): return 1 / (np.sqrt(s))
 
 
 def gaussian_sample(std: float = 1,
                     min: int = -3,
                     max: int = 3,
                     n_samples: int = 50) -> Vector:
-    '''
-    Return a 1-d Gaussian array of std sigma
-    '''
-    coeff = 1 / np.sqrt(std**2)
-    coeff_pi = coeff / np.sqrt(2 * np.pi)
+    """Return a 1-d Gaussian array.
+
+    Parameters
+    ----------
+    std: float, default 1.
+        standard deviation of the gaussian distribution.
+    min: int, default -3.
+    max: int, default -3.
+    n_samples: int default 50.
+        number of samples required.
+
+    Returns
+    -------
+    x: Vector
+        1-d gaussian array.
+    """
 
     x = np.linspace(min, max, n_samples)
-    x = coeff_pi * np.exp(-coeff * pow(x, 2))
+    x = CG(std) * SQRT_PI * np.exp(-CG(std) * pow(x, 2))
 
     return np.reshape(x, (len(x), 1))
 
@@ -57,10 +70,10 @@ def gaussian_kernelv2(std: float = 1, threshold=None) -> Matrix:
     if std < 0:
         raise ValueError('The std cannot be negative')
     # haldf-witdh of the filter
-    h_w = floor(std) * 3
-    w = 2 * h_w + 1
+    hw = floor(std) * 3
+    w = 2 * hw + 1
     # w*5 : allows to add more points to the mesh grid
-    def gauss(): return gaussian_sample(std, -w, w, w * 5)
+    def gauss(): return gaussian_sample(std, -hw, hw, w * 5)
     x, y = gauss(), gauss()
     m = np.dot(x, y.T)
 
@@ -82,4 +95,11 @@ def gaussian_kernelv2(std: float = 1, threshold=None) -> Matrix:
 
 
 a = gaussian_kernelv2(5)
-MyImage.show(a)
+b = gaussian_kernel(5)
+
+plt.figure()
+plt.subplot(1, 2, 1)
+plt.imshow(a)
+plt.subplot(1, 2, 2)
+plt.imshow(b)
+plt.show()
