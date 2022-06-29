@@ -4,11 +4,27 @@ from im import MyImage
 from typing import Iterable
 import matplotlib.pyplot as plt
 from scipy.signal import convolve2d
-Matrix = Iterable[Iterable[float]]
+
+
+Matrix = np.ndarray
 Vector = Iterable[float]
 
 SQRT_PI = np.sqrt(2 * np.pi)
 def CG(s: float): return 1 / (np.sqrt(s))
+
+
+def guassian_samplev2(l=5, std=1.) -> Vector:
+    """Fast gaussian Sample generation
+    Allows to quickly generates a gaussian x-vector
+
+    Parameters
+    ----------
+    std: float
+
+    """
+    ax = np.linspace(-(l - 1) / 2., (l - 1) / 2., l)
+    gauss = np.exp(-0.5 * np.square(ax) / np.square(std))
+    return np.reshape(gauss, (gauss.shape[0], 1))
 
 
 def gaussian_sample(std: float = 1,
@@ -16,6 +32,8 @@ def gaussian_sample(std: float = 1,
                     max: int = 3,
                     n_samples: int = 50) -> Vector:
     """Return a 1-d Gaussian array.
+    Allows for more spec for the desired output
+    than `gaussian.guassian_samplev2`.
 
     Parameters
     ----------
@@ -28,7 +46,7 @@ def gaussian_sample(std: float = 1,
 
     Returns
     -------
-    x: Vector
+    x: ndarray
         1-d gaussian array.
 
     Notes
@@ -37,6 +55,9 @@ def gaussian_sample(std: float = 1,
     and not (n_samples,) for an easy reuse with numpy.dot
     to create matrix for instance.
 
+    See Also
+    --------
+    gaussian_samplev2 : faster computation with no parametrization.
     """
 
     x = np.linspace(min, max, n_samples)
@@ -60,7 +81,7 @@ def gaussian_kernel(std: float = 1, threshold: float = None, sf=None) -> Matrix:
 
     Returns
     -------
-        kernel: Matrix
+        kernel: ndarray
             Gaussian kernel for convolution.
     """
     if std < 0:
@@ -94,17 +115,13 @@ def gaussian_kernel(std: float = 1, threshold: float = None, sf=None) -> Matrix:
         return kernel
 
 
-def laplacianOfGaussian(std: float = 1,
-                        min: int = -3,
-                        max: int = 3,
-                        n_samples: int = 50,
+def laplacianOfGaussian(l: int = 5, std: float = 1.,
                         threshold: float = None) -> Matrix:
     """Compute the Laplacian of gaussian.
     This function creates a LoG mask (matrix where values
     correpond to the laplacian of the gaussian mask.)
     """
-    args = (std, min, max, n_samples)
-    x = gaussian_sample(*args)
+    x = guassian_samplev2(l, std)
     y = x
     if threshold is not None:
         x = x[x[:, 0] > threshold, :]
@@ -115,11 +132,4 @@ def laplacianOfGaussian(std: float = 1,
     # gradient convolutive kernel
     gKernel = np.array([[0, 1, 0], [1, -4, 1], [0, 1, 0]])
     kernel = convolve2d(mat, gKernel, "same", "symm")
-    return kernel / np.sum(kernel)
-
-
-# TODO : Corriger les bords qui tremblent lorsqu'on passe en module
-a = laplacianOfGaussian(std=0.3)
-b = MyImage('lena').get_matrix('maison')
-c = convolve2d(b, a, "same", "symm")
-MyImage.show_compare(b, c)
+    return kernel
