@@ -31,6 +31,13 @@ def gaussian_sample(std: float = 1,
     -------
     x: Vector
         1-d gaussian array.
+
+    Notes
+    -----
+    The shape of the output vector is (n_samples,1) 
+    and not (n_samples,) for an easy reuse with numpy.dot
+    to create matrix for instance.
+
     """
 
     x = np.linspace(min, max, n_samples)
@@ -39,15 +46,32 @@ def gaussian_sample(std: float = 1,
     return np.reshape(x, (len(x), 1))
 
 
-def gaussian_kernel(std: float = 1, threshold=None) -> Matrix:
+def gaussian_kernel(std: float = 1, threshold: float = None, sf=None) -> Matrix:
+    """Generate a gaussian Kernel.
+    This function returns a matrix corresponding to a
+    a gaussian kernel with parameters `mu=0 and sigma=`std`.
+    By Default, the witdh of the filter will be
+    `w=3*std`
+
+    Parameters
+    ----------
+    std: float, default 1.
+        standard deviation fo the gaussian function.
+    threshold: float, default None.
+
+    Returns
+    -------
+        kernel: Matrix
+            Gaussian kernel for convolution.
+    """
     if std < 0:
         raise ValueError('The std cannot be negative')
     # haldf-witdh of the filter
     hw = floor(std) * 3
     w = 2 * hw + 1
     # w*5 : allows to add more points to the mesh grid
-    def gauss(): return gaussian_sample(std, -hw, hw, w * 5)
-    x, y = gauss(), gauss()
+    x = gaussian_sample(std, -hw, hw, w * 5)
+    y = x
     m = np.dot(x, y.T)
 
     # get only usefull values inside [-3*std,3*std]
@@ -56,23 +80,15 @@ def gaussian_kernel(std: float = 1, threshold=None) -> Matrix:
         c_x = w * 5 // 2
         c_y = w * 5 // 2
         cut = w * 5 // 5
+        if sf is not None:
+            scale_factor = 1 / np.average(m)
+            m = scale_factor * m
         kernel = m[c_x - cut:c_x + cut + 1, c_y - cut:c_y + cut + 1]
-        scale_factor = 1 / np.average(kernel)
-        kernel = scale_factor * kernel
         return kernel
-
-    kernel = m[m[...] < threshold]
-    scale_factor = 1 / np.average(kernel)
-    kernel = scale_factor * kernel
-    return kernel
-
-
-a = gaussian_kernelv2(5)
-b = gaussian_kernel(5)
-
-plt.figure()
-plt.subplot(1, 2, 1)
-plt.imshow(a)
-plt.subplot(1, 2, 2)
-plt.imshow(b)
-plt.show()
+    else:
+        x = x[x[:, 0] > threshold, :]
+        y = x
+        kernel = np.dot(x, y.T)
+        if sf is not None:
+            return scale_factor * kernel
+        return kernel

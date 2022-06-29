@@ -105,7 +105,16 @@ class MyImage:
             return mpimg.imread(path.resolve().as_posix())
 
     @staticmethod
-    def show(im: np.array) -> None:
+    def show(img: np.array) -> None:
         plt.figure()
-        plt.imshow(im, cmap='gray')
+        plt.imshow(img, cmap='gray')
+        plt.show()
+
+    @staticmethod
+    def show_compare(img1: np.array, img2: np.array, icmap='gray') -> None:
+        plt.figure()
+        plt.subplot(1, 2, 1)
+        plt.imshow(img1, cmap=icmap)
+        plt.subplot(1, 2, 2)
+        plt.imshow(img2, cmap=icmap)
         plt.show()
