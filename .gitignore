@@ -2,3 +2,4 @@ image_folder
 __pycache__
 output
 .vscode
+processing/main.py
