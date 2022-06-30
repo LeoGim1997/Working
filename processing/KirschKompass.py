@@ -86,3 +86,38 @@ def show_result(img: MyImage) -> None:
         plt.imshow(apply1Compass(img, c), cmap='gray')
         plt.title(f'g({c})')
     plt.show()
+
+
+def KirschEdge(image: np.array) -> np.array:
+    """Compute Edge dectection using Kirsch Kompass.
+
+    The value for  the output pixel `i,j` denoted `p[i,j]`
+    correspond to the maximum value of `p[i,j]` among
+    all convolved matrix `g(z)*image`,
+    with g(z=1,2..) the Kirsch Mask for 1 orientation.
+
+    Parameters
+    ----------
+    image: np.array
+        Input image matrix.
+
+    Returns
+    -------
+    edge: np.array
+        Output image matrix.
+
+    See Also
+    --------
+    g: compute the Kirsch Mask for 1 direction.
+    apply1Compass: returns the convolution maxtrix for 1 chosen direction.
+    """
+    # Brute force
+    im = normalize(image)
+    im = image
+    all_mat = [convolve2d(im, g, "same", "symm") for g in kirschCompass()]
+    edge = np.zeros((image.shape))
+    n, m = im.shape
+    for i in range(n):
+        for j in range(m):
+            edge[i, j] = max([all_mat[a][i, j] for a in range(0, 7)])
+    return edge
