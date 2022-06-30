@@ -1,8 +1,8 @@
 import numpy as np
 import sys
 from pathlib import Path
-from processing.gaussian import gaussian_kernel
 sys.path.append(Path(__file__).parents[1].resolve().as_posix())
+from processing.gaussian import gaussian_kernel
 from scipy.signal import convolve2d
 
 
@@ -27,7 +27,10 @@ def gaussian_blur(img: np.array, sigma: float = 1, fill_pad=False) -> np.array:
     return img_c[hw:-hw, hw:-hw]
 
 
-def image_padding(img: np.array, half_pad: int = 4, fill_pad=False) -> np.array:
+def image_padding(img: np.array,
+                  half_pad: int = 4,
+                  fill_pad=False,
+                  defaultfill=1) -> np.array:
     '''
     Function returning a padded image use for convolution
     with a square fitler of half_with = half_pad.
@@ -36,8 +39,12 @@ def image_padding(img: np.array, half_pad: int = 4, fill_pad=False) -> np.array:
     n, m = np.shape(img)
     hw = half_pad
     # pad the image for fitting
-    img_c = np.ones((n + 2 * hw, m + 2 * hw))
-    img_c[hw:-hw, hw:-hw] = img
+    if defaultfill == 1:
+        img_c = np.ones((n + 2 * hw, m + 2 * hw))
+        img_c[hw:-hw, hw:-hw] = img
+    else:
+        img_c = defaultfill * np.ones((n + 2 * hw, m + 2 * hw))
+        img_c[hw:-hw, hw:-hw] = img
 
     # filling the 4 corner with the same corner value as the original image
     if fill_pad and half_pad != 1:
