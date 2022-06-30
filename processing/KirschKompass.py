@@ -64,7 +64,7 @@ def kirschCompass(n: int = 8) -> GeneratorType:
     >>> a = kirschCompass(3)
     >>> print(type(a))
         class <GeneratorType>
-    >>> a = list(kirschCompass(3))
+    >>> a = list(a))
     >>> print(a[0])
         [[5, 5, 5], 
         [-3, 0, -3], 
