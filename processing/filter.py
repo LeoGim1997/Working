@@ -6,25 +6,13 @@ from processing.gaussian import gaussian_kernel
 from scipy.signal import convolve2d
 
 
-def gaussian_blur(img: np.array, sigma: float = 1, fill_pad=False) -> np.array:
+def gaussian_blur(img: np.array, sigma: float = 1) -> np.array:
     '''
     Apply a 7x7 gaussian blur on a img (default)
     on 1 channel of the input image
     '''
     filter = gaussian_kernel(std=sigma)
-    n, m = np.shape(img)
-    cut = np.shape(filter)
-    hw = cut[0] // 2
-    # pad the image for fitting
-    img_c = image_padding(img, hw, fill_pad)
-    N, M = np.shape(img_c)
-    # convolution part
-    for i in range(hw, N - hw):
-        for j in range(hw, M - hw - 1):
-            sub_matrix = img_c[i - hw:i + hw + 1, j - hw:j + hw + 1]
-            prod = np.multiply(sub_matrix, filter)
-            img_c[i, j] = np.average(prod)
-    return img_c[hw:-hw, hw:-hw]
+    return convolve2d(img, filter, "same", "symm")
 
 
 def image_padding(img: np.array,
