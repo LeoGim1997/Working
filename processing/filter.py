@@ -40,7 +40,7 @@ def image_padding(img: np.array, half_pad: int = 4, fill_pad=False) -> np.array:
     img_c[hw:-hw, hw:-hw] = img
 
     # filling the 4 corner with the same corner value as the original image
-    if fill_pad and fill_pad != 1:
+    if fill_pad and half_pad != 1:
         # top block of the matrix
         img_c[0:hw, 0:hw] = img[0, 0] * img_c[0:hw, 0:hw]
         for i in range(hw):
@@ -56,7 +56,8 @@ def image_padding(img: np.array, half_pad: int = 4, fill_pad=False) -> np.array:
         img_c[hw:-hw, :hw] = img[:, :hw]
         img_c[hw:-hw, -hw:] = img[:, -hw:]
         return img_c
-    if fill_pad == 1:
+
+    if fill_pad and half_pad == 1:
         img_c[0:hw, 0:hw] = img[0, 0] * img_c[0:hw, 0:hw]
         for i in range(hw):
             img_c[i, hw:-hw] = img[0, :]
@@ -71,6 +72,7 @@ def image_padding(img: np.array, half_pad: int = 4, fill_pad=False) -> np.array:
         img_c[hw:-hw, :hw] = img[:, :hw]
         img_c[hw:-hw, -hw:] = img[:, -hw:]
         return img_c
+    return img_c
 
 
 def sobel_filter_horizontal(img: np.array) -> np.array:
