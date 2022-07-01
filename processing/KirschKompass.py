@@ -52,7 +52,7 @@ def kirschCompass(n: int = 8) -> GeneratorType:
 
     Parameters
     ----------
-    n: int
+    - n: int
         final rank for z
 
     Examples
@@ -93,12 +93,12 @@ def KirschEdge(image: np.array) -> np.array:
 
     Parameters
     ----------
-    image: np.array
+    - image: np.array
         Input image matrix.
 
     Returns
     -------
-    edge: np.array
+    - edge: np.array
         Output image matrix.
 
     See Also
