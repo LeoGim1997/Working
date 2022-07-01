@@ -73,8 +73,7 @@ def apply1Compass(img: np.array, z: int = 1) -> np.array:
     return convolve2d(img, g(z), "same", "symm")
 
 
-def show_result(img: MyImage) -> None:
-    img = img.get_matrix(img.name)
+def show_result(img: np.array) -> None:
     img = normalize(img)
     plt.figure()
     for c in range(1, 9):
