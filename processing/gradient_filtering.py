@@ -52,14 +52,12 @@ def analyze_gradient(img: np.array,
                                  operator=operator,
                                  return_xy_gradient=True)
     x, y = np.ravel(Gx), np.ravel(Gy)
+    mx, my = np.max(x), np.min(y)
     plt.figure()
     plt.scatter(x, y)
-    plt.title('Scatter plot of gradient points.')
-    plt.xlabel('\033[1m' + 'Ix' + '\033[0m')
-    plt.xlabel('\033[1m' + 'Iy' + '\033[0m')
+    plt.xlim((-2 * mx, 2 * mx))
+    plt.xlim((-2 * my, 2 * my))
+    plt.title('Distribution of image gradients.')
+    plt.xlabel('Ix')
+    plt.ylabel('Iy')
     plt.show()
-
-
-from im import MyImage
-a = MyImage('lena').get_matrix('chessboard')
-analyze_gradient(a)
