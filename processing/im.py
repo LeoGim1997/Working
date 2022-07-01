@@ -114,9 +114,9 @@ class MyImage:
         return mpimg.imread(path.resolve().as_posix())
 
     @staticmethod
-    def show(img: np.array) -> None:
+    def show(img: np.array, icmap='gray') -> None:
         plt.figure()
-        plt.imshow(img, cmap='gray')
+        plt.imshow(img, cmap=icmap)
         plt.show()
 
     @staticmethod
