@@ -100,12 +100,15 @@ class MyImage:
         dirImage = Path(__file__).parents[1] / 'image_folder'
         if fullpath is not None:
             return mpimg.imread(fullpath)
+
         if image == 'lena':
             path = dirImage / 'lena.jpeg'
         if image == 'maison':
             path = dirImage / 'maison_alsacienne.jpeg'
         if image == 'temple':
             path = dirImage / 'Boxfilter_pavilion_original.jpg'
+        if image == 'chessboard':
+            path = dirImage / 'chessboard_GRAY.png'
             if not path.exists():
                 raise FileExistsError(f'Image {path.as_posix()}')
         return mpimg.imread(path.resolve().as_posix())
