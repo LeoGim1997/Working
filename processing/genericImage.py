@@ -19,3 +19,11 @@ def im2(n: int = 5) -> np.array:
     b = 0 * np.triu(a, k=0)
     c = np.tril(a, k=0)
     return b + c
+
+
+def opposite_eye(n: int = 3):
+    a = np.eye(n)
+    for c, r in enumerate(a):
+        r = r[::-1]
+        a[c, :] = r
+    return a
