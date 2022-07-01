@@ -11,10 +11,10 @@ def noise(image: np.array, noise_typ='s_p'):
         row, col = np.shape(image)
         ch = 1
     if noise_typ == "gauss":
-        gauss = gaussian_noise(image, 5, 14)
+        gauss = gaussian_noise(image, 0, 0.3)
         return image + gauss  # Additive noise
     elif noise_typ == "s_p":
-        return salt_and_peper_noise(image, alpha=0.3)
+        return salt_and_peper_noise(image, alpha=0.1)
     elif noise_typ == "poisson":
         vals = len(np.unique(image))
         vals = 2 ** np.ceil(np.log2(vals))
