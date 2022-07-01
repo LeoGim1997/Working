@@ -29,24 +29,20 @@ def g(z: int = 1) -> np.array:
     g1 = np.asarray([[5, 5, 5], [-3, 0, -3], [-3, -3, -3]])
     g2 = np.asarray([[5, 5, -3], [5, 0, -3], [-3, -3, -3]])
     mirror = np.asarray([[0, 0, 1], [0, 1, 0], [1, 0, 0]])
-    if (z < 0 or z > 8) or type(z) is float:
+
+    mapDict = {
+        1: g1,
+        2: g2,
+        3: g2.T,
+        4: np.transpose(np.dot(g2, mirror)),
+        5: np.transpose(np.dot(g1.T, mirror)),
+        6: np.dot(np.transpose(np.dot(g2, mirror)), mirror),
+        7: np.dot(g1.T, mirror),
+        8: np.dot(g2, mirror),
+    }
+    if mapDict.get(z) is None:
         raise ValueError(f'Wrong value z={z}. Must be between 0 and 8.')
-    if z == 1:
-        return g1
-    if z == 2:
-        return g2
-    if z == 3:
-        return g1.T
-    if z == 4:
-        return np.transpose(np.dot(g2, mirror))
-    if z == 5:
-        return np.transpose(np.dot(g1.T, mirror))
-    if z == 6:
-        return np.dot(np.transpose(np.dot(g2, mirror)), mirror)
-    if z == 7:
-        return np.dot(g1.T, mirror)
-    if z == 8:
-        return np.dot(g2, mirror)
+    return mapDict.get(z)
 
 
 def kirschCompass(n: int = 8) -> GeneratorType:
