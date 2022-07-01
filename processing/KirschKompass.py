@@ -90,7 +90,7 @@ def KirschEdge(image: np.array) -> np.array:
     The value for  the output pixel `i,j` denoted `p[i,j]`
     correspond to the maximum value of `p[i,j]` among
     all convolved matrix `g(z)*image`,
-    with g(z=1,2..) the Kirsch Mask for 1 orientation.
+    where g(z=1,2..) is a Kirsch Mask for 1 orientation.
 
     Parameters
     ----------
