@@ -70,10 +70,11 @@ def gray_scale(img: np.array) -> np.array:
 
 
 def fast_rgb2grey(img: np.array) -> np.array:
-    if len(img.shape) == 3:
-        return np.dot(img[..., :3], [0.299, 0.587, 0.114])
-    else:
-        return 0
+    img = np.asarray(img)
+
+    if len(img.shape) != 3:
+        raise ValueError(f'Wrong dim for input image. shape={img.shape}')
+    return np.dot(img[..., :3], [0.299, 0.587, 0.114])
 
 
 def rotating_image(img: np.array, axis='horizontal') -> np.array:

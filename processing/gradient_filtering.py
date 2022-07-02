@@ -3,11 +3,33 @@ from scipy.ndimage import convolve
 import matplotlib.pyplot as plt
 
 
+def sobel():
+    a1 = np.matrix([1, 2, 1])
+    a2 = np.matrix([-1, 0, 1])
+    Kx = a1.T * a2
+    Ky = a2.T * a1
+    return Kx, Ky
+
+
+def robert():
+    Kx = np.array([[1, 0], [0, -1]])
+    Ky = np.array([[0, 1], [-1, 0]])
+    return Kx, Ky
+
+
+def canny():
+    Kx = np.array([-1, 0, 1])
+    Ky = np.array([1, 0, 1])
+    Kx = np.reshape(Kx, (1, 3))
+    Ky = np.reshape(Kx, (3, 1))
+    return Kx, Ky.T
+
+
 def compute_gradient(img: np.array,
                      operator: str = 'Sobel',
                      return_xy_gradient: bool = False) -> np.array:
     '''Compute gradient.
-    This function compute the gradient image (G) 
+    This function compute the gradient image (G)
     of the input image `img`.
     by convolution with an operator.
 
@@ -16,7 +38,13 @@ def compute_gradient(img: np.array,
     img: np.array
         Input image.
     operator: str
-        Operator to compute the gradient (Default is Sobel).
+        Operator to compute the gradient (Default is Sobel operator).
+        Possible values can be:
+
+        - sobel
+        - canny
+        - robert
+
     return_xy_gradient: bool
         Allows to returns Gx,Gy in additon to G
 
@@ -25,17 +53,20 @@ def compute_gradient(img: np.array,
     G: np.array
         Gradient image.
     G,Gx,Gy: tuple(np.array)
-        If `return_xy_gradient=True`, 
+        If `return_xy_gradient=True`,
         returns gradient matrix in x,y direction.
     '''
-    if operator == 'Sobel':
-        a1 = np.matrix([1, 2, 1])
-        a2 = np.matrix([-1, 0, 1])
-        Kx = a1.T * a2
-        Ky = a2.T * a1
-    if operator == 'Robert':
-        Kx = np.array([[1, 0], [0, -1]])
-        Ky = np.array([[0, 1], [-1, 0]])
+
+    mapDict = {
+        'sobel': sobel,
+        'robert': robert,
+        'canny': canny
+    }
+
+    func = mapDict.get(operator)
+    if func is None:
+        raise ValueError(f'No operator called {operator} found.')
+    Kx, Ky = func()
     # Apply the Sobel operator
     Gx = convolve(img, Kx)
     Gy = convolve(img, Ky)
@@ -45,9 +76,9 @@ def compute_gradient(img: np.array,
     return G
 
 
-def analyze_gradient(img: np.array,
-                     operator: str = 'Sobel',
-                     ) -> None:
+def distribution(img: np.array,
+                 operator: str = 'Sobel',
+                 ) -> None:
     G, Gx, Gy = compute_gradient(img=img,
                                  operator=operator,
                                  return_xy_gradient=True)
