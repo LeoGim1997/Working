@@ -30,3 +30,15 @@ def opposite_eye(n: int = 3) -> np.array:
         r = r[::-1]
         a[c, :] = r
     return a
+
+
+def straight_line() -> np.array:
+    """Classic straight-line Hough transform.
+    Form a template matric which form an
+    X with blank line.
+    """
+    image = np.zeros((100, 100))
+    idx = np.arange(25, 75)
+    image[idx[::-1], idx] = 225
+    image[idx, idx] = 255
+    return image
