@@ -2,7 +2,7 @@ import numpy as np
 
 
 def im1(n: int = 5) -> np.array:
-    """square Matrix with upper 
+    """square Matrix with upper
     assigned to 1.
     """
     a = np.ones((n, n))
@@ -12,7 +12,7 @@ def im1(n: int = 5) -> np.array:
 
 
 def im2(n: int = 5) -> np.array:
-    """square Matrix with lower 
+    """square Matrix with lower
     assigned to 1.
     """
     a = np.ones((n, n))
@@ -21,7 +21,10 @@ def im2(n: int = 5) -> np.array:
     return b + c
 
 
-def opposite_eye(n: int = 3):
+def opposite_eye(n: int = 3) -> np.array:
+    """Return the axial symettry of
+    an `n*n` eye matrix.
+    """
     a = np.eye(n)
     for c, r in enumerate(a):
         r = r[::-1]
