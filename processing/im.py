@@ -96,19 +96,19 @@ class MyImage:
     def __init__(self, name='lena') -> None:
         self.name = name
 
-    def get_matrix(self, image='lena', fullpath: str = None):
+    def get_matrix(self, fullpath: str = None):
         dirImage = Path(__file__).parents[1] / 'image_folder'
         if fullpath is not None:
             return mpimg.imread(fullpath)
 
         mapDict = {
             'lena': dirImage / 'lena.jpeg',
-            'maison': dirImage / 'maison_alsacienne.jpeg',
+            'house': dirImage / 'maison_alsacienne.jpeg',
             'temple': dirImage / 'Boxfilter_pavilion_original.jpg',
             'chessboard': dirImage / 'chessboard_GRAY.png',
             'bbc': dirImage / 'bbc-logo.jpeg'
         }
-        path = mapDict.get(image)
+        path = mapDict.get(self.name)
         if path is None:
             raise FileExistsError(f'Image {path.as_posix()}')
         return mpimg.imread(path.resolve().as_posix())
