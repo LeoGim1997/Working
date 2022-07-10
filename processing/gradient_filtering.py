@@ -26,7 +26,7 @@ def canny():
 
 
 def compute_gradient(img: np.array,
-                     operator: str = 'Sobel',
+                     operator: str = 'sobel',
                      return_xy_gradient: bool = False) -> np.array:
     '''Compute gradient.
     This function compute the gradient image (G)
@@ -67,7 +67,7 @@ def compute_gradient(img: np.array,
     if func is None:
         raise ValueError(f'No operator called {operator} found.')
     Kx, Ky = func()
-    # Apply the Sobel operator
+    # Apply the selected operator
     Gx = convolve(img, Kx)
     Gy = convolve(img, Ky)
     G = np.abs(Gx) + np.abs(Gy)
