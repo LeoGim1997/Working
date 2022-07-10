@@ -92,7 +92,36 @@ def rotating_image(img: np.array, axis='horizontal') -> np.array:
     return img_rotate
 
 
+def imageThreshold(img: np.array, th: float) -> np.array:
+    """Threshold the input image
+    this function take the input threshold to binarize
+    the image and returns a copy
+
+    Parameters
+    ----------
+
+    img: np.array
+        The input image as an array.
+    th: np.array
+        the selected threshold.
+
+    Returns
+    -------
+
+    img: np.array
+        the thresholded image.
+
+    Notes:
+    The value below `th` will be considered as `0`.
+    """
+    a = np.copy(img)
+    a[a >= th] = 1
+    a[a < 1] = 0
+    return a
+
 # Easy image Load
+
+
 class MyImage:
     def __init__(self, name='lena') -> None:
         self.name = name
