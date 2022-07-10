@@ -1,9 +1,10 @@
 import numpy as np
-from typing import Tuple
+from typing import Tuple, Any
 from im import MyImage
+import matplotlib.pyplot as plt
 
 
-def hough_line(img: np.array, theta=None) -> Tuple:
+def hough_line(img: np.array, theta=None) -> Tuple[Any]:
     """Compute the Hough line detector.
     This function generate the Hough Parameters Space
     for line detection inside a thresholded image.
@@ -19,7 +20,7 @@ def hough_line(img: np.array, theta=None) -> Tuple:
     Returns
     -------
     accum: np.array
-        Accumulator array for the paramters space (`rho`,`theta`).
+        Accumulator array for the paramters space `(rho,theta)`.
     theta: np.array
         The input theta array of the defaulted value.
     bins: np.array
@@ -37,8 +38,6 @@ def hough_line(img: np.array, theta=None) -> Tuple:
     given line crossing a point. If theta is not specified
     this function will define a theta vector with values in \ 
     `[-np.pi/2,np.pi/2]`.
-
-
     """
     if theta is None:
         theta = np.linspace(-np.pi / 2, np.pi / 2, 360, endpoint=False)
@@ -64,6 +63,24 @@ def hough_line(img: np.array, theta=None) -> Tuple:
     return accum, theta, bins
 
 
-def show_hough_space(img: np.array) -> None:
-    h, theta, bins = hough_line(img)
-    MyImage.show_compare(img, np.log(1 + h))
+def show_hough_space(image: np.array) -> None:
+    h, theta, d = hough_line(image)
+    fig, axes = plt.subplots(1, 2, figsize=(15, 6))
+    ax = axes.ravel()
+
+    ax[0].imshow(image, cmap='gray')
+    ax[0].set_title('Input image')
+    ax[0].set_axis_off()
+
+    angle_step = 0.5 * np.diff(theta).mean()
+    d_step = 0.5 * np.diff(d).mean()
+    bounds = [np.rad2deg(theta[0] - angle_step),
+              np.rad2deg(theta[-1] + angle_step),
+              d[-1] + d_step, d[0] - d_step]
+    ax[1].imshow(np.log(1 + h), extent=bounds, cmap='gray', aspect=1 / 1.5)
+    ax[1].set_title('Hough transform')
+    ax[1].set_xlabel('Angles (degrees)')
+    ax[1].set_ylabel('Distance (pixels)')
+    ax[1].axis('image')
+    plt.tight_layout()
+    plt.show()

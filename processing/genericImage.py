@@ -51,3 +51,4 @@ def cross_line() -> np.array:
     image[idx, idx] = 255
     image[line(45, 25, 25, 175)] = 255
     image[line(25, 135, 175, 155)] = 255
+    return image
