@@ -4,9 +4,41 @@ from im import MyImage
 
 
 def hough_line(img: np.array, theta=None) -> Tuple:
-    """
-    Compute the hough line detector inside for the
-    edges of the images.
+    """Compute the Hough line detector.
+    This function generate the Hough Parameters Space
+    for line detection inside a thresholded image.
+
+    Parameters
+    ----------
+
+    img: np.array
+        Input NxM image matrix.
+    theta: np.array
+        theta array for the angle bound.
+
+    Returns
+    -------
+    accum: np.array
+        Accumulator array for the paramters space (`rho`,`theta`).
+    theta: np.array
+        The input theta array of the defaulted value.
+    bins: np.array
+        the number of possible rho value for the input.
+
+    Notes
+    -----
+    As a line is by hypthothesis belonging to the edges of the
+    image, a preprocessing of the input image need to be done.
+    This function does not do it. In order to this function
+    to work correctly apply an edge detector + threshold to the
+    image.
+
+    The theta vector represent all possibles angle value for a
+    given line crossing a point. If theta is not specified
+    this function will define a theta vector with values in \ 
+    `[-np.pi/2,np.pi/2]`.
+
+
     """
     if theta is None:
         theta = np.linspace(-np.pi / 2, np.pi / 2, 360, endpoint=False)
