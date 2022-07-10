@@ -1,4 +1,5 @@
 import numpy as np
+from skimage.draw import line
 
 
 def im1(n: int = 5) -> np.array:
@@ -42,3 +43,11 @@ def straight_line() -> np.array:
     image[idx[::-1], idx] = 225
     image[idx, idx] = 255
     return image
+
+
+def cross_line() -> np.array:
+    image = np.zeros((200, 200))
+    idx = np.arange(25, 175)
+    image[idx, idx] = 255
+    image[line(45, 25, 25, 175)] = 255
+    image[line(25, 135, 175, 155)] = 255
