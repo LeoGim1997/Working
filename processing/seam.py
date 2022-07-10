@@ -3,7 +3,7 @@ import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
 from im import fast_rgb2grey
-from function import compute_gradient
+from gradient_filtering import compute_gradient
 
 img = plt.imread('/Users/leogimenez/Desktop/git_depo_local/Working/image/image_folder/tower.png')
 img_g = compute_gradient(fast_rgb2grey(img), operator='Robert')
