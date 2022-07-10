@@ -63,17 +63,6 @@ def hough_line(img: np.array, theta=None) -> Tuple[Any]:
     return accum, theta, bins
 
 
-<< << << < HEAD
-
-
-def show_hough_space(img: np.array) -> None:
-    h, theta, bins = hough_line(img)
-    MyImage.show_compare(img, np.log(1 + h))
-
-
-== == == =
-
-
 def show_hough_space(image: np.array) -> None:
     h, theta, d = hough_line(image)
     fig, axes = plt.subplots(1, 2, figsize=(15, 6))
@@ -95,6 +84,3 @@ def show_hough_space(image: np.array) -> None:
     ax[1].axis('image')
     plt.tight_layout()
     plt.show()
-
-
->>>>>> > 782c727(hough addition)
