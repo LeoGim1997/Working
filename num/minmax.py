@@ -10,12 +10,8 @@ g = g[::-1]
 d = g[::-1]
 b = g + a + d
 
-
-at = []
 c = int(k / 2)
-for i in range(k, len(b) - k):
-    t = b[i - c:i + c + 1]
-    at.append(max(t))
+at = [max(b[i - c:i + c + 1]) for i in range(k, len(b) - k)]
 at = np.array(at)
 print(f'methode1 = {at}')
 
