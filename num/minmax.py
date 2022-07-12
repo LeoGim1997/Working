@@ -1,19 +1,32 @@
 import numpy as np
+from collections.abc import Iterable
 
-# Methode 1
-a = [0, 11, 4, 3, 8, 5, 6, 1, 7, 3, 10]
 
-k = 3
-g = a[0:k]
-d = a[len(a) - k:]
-g = g[::-1]
-d = g[::-1]
-b = g + a + d
+def maxAlongAxis(input, size, mode='reflect', cval=0.0, origin=0, keepType=True):
+    if not isinstance(input, Iterable):
+        input = list(input)
+        modifiedType = type(input)
+    mapDict = {
+        'reflect': reflectmode,
+        'constant': constantmode,
+        'nearest': nearestmode,
+    }
+    postProcess = mapDict.get(mode)(input, size)
+    # TODO : Implement those 3 functions
 
-c = int(k / 2)
-at = [max(b[i - c:i + c + 1]) for i in range(k, len(b) - k)]
-at = np.array(at)
-print(f'methode1 = {at}')
 
-from scipy.ndimage import maximum_filter1d
-print(f'methode2 = {maximum_filter1d(a, size=k)}')
+def reflectmode(input: list, size: int) -> Iterable:
+
+    g = input[0:size]
+    d = input[len(input) - size:]
+    g = g[::-1]
+    d = g[::-1]
+    return g + input + d
+
+
+def constantmode(input: list, size: int, cval: float) -> Iterable:
+    pass
+
+
+def nearestmode(input: list, size: int) -> Iterable:
+    pass
