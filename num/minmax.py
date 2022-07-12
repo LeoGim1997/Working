@@ -16,11 +16,12 @@ def maxAlongAxis(input, size, mode='reflect', cval=0.0, origin=0, keepType=True)
 
 
 def reflectmode(input: list, size: int) -> Iterable:
-
+    if size > len(input):
+        raise ValueError(f'window of {size} larger than total input length.')
     g = input[0:size]
     d = input[len(input) - size:]
     g = g[::-1]
-    d = g[::-1]
+    d = d[::-1]
     return g + input + d
 
 
