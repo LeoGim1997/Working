@@ -56,7 +56,7 @@ def test_fft_firstvalue(func, N):
 @pytest.mark.parametrize('func,N', [(dirac, 32)])
 def test_fft_allvalues(func, N):
     tf = fft(func(N))
-    assert [np.abs(e) == pytest.approx(1, 10e3) for e in tf]
+    assert all([np.abs(e) == pytest.approx(1, 10e-3) for e in tf])
 
 
 @pytest.mark.parametrize('type',
