@@ -3,6 +3,7 @@ from num.minmax import *
 
 l1 = [1, 2, 3]
 l2 = [1, 2, 5, 5, 5, 5]
+l3 = [2, 8, 0, 4, 1, 9, 9, 0]
 
 
 @pytest.mark.parametrize('args', [{'input': l1, 'size': 3}])
@@ -88,3 +89,12 @@ def test_maxAlong_Exception(kw):
     with pytest.raises(ValueError) as exp:
         maxAlongAxis(**kw)
     assert exp.type is ValueError
+
+
+@pytest.mark.parametrize('kw,expected', [({'input': l3, 'size': 3,
+                                           'mode': 'reflect', 'cval': 0.0},
+                                          [8, 8, 8, 4, 9, 9, 9, 9])
+                                         ])
+def test_maxAlong_value(kw, expected):
+    a = maxAlongAxis(**kw)
+    assert a == expected
