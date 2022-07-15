@@ -2,7 +2,7 @@ import numpy as np
 from collections.abc import Iterable
 
 
-def maxAlongAxis(input, size, mode='reflect', cval=0.0, origin=0):
+def maxAlongAxis(input, size, mode='reflect', cval=0.0):
     if not isinstance(input, Iterable):
         raise ValueError('input value is not Iterable.')
     modifiedType = type(input)
@@ -13,7 +13,11 @@ def maxAlongAxis(input, size, mode='reflect', cval=0.0, origin=0):
         'nearest': nearestmode,
     }
     args = locals()
-    postP = mapDict.get(mode)(**args)
+    try:
+        mapDict[mode]
+    except Exception as e:
+        raise ValueError(f'Incorrect mode =  {mode}')
+    postP = mapDict[mode](**args)
     c = int(size / 2)
     at = [max(postP[i - c:i + c + 1]) for i in range(size, len(postP) - size)]
 

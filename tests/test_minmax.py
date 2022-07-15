@@ -73,3 +73,18 @@ def test_nearestmode(args):
 def test_nearestmode(args):
     a = nearestmode(**args)
     assert isinstance(a, Iterable)
+
+
+@pytest.mark.parametrize('args', [{'input': [4, 5, 6], 'size':3}])
+def test_nearestmodeleft(args):
+    a = nearestmode(**args)
+    b, size = args.get('input'), args.get('size')
+    assert all([c == b[0] for c in a[0:size]])
+
+
+@pytest.mark.parametrize('kw', [{'input': l1, 'size': 4,
+                                'mode': 'wrongMode', 'cval': 0.0}])
+def test_maxAlong_Exception(kw):
+    with pytest.raises(ValueError) as exp:
+        maxAlongAxis(**kw)
+    assert exp.type is ValueError
