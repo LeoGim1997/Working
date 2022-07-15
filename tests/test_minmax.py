@@ -1,5 +1,6 @@
 import pytest
 from num.minmax import *
+import numpy as np
 
 l1 = [1, 2, 3]
 l2 = [1, 2, 5, 5, 5, 5]
@@ -98,3 +99,10 @@ def test_maxAlong_Exception(kw):
 def test_maxAlong_value(kw, expected):
     a = maxAlongAxis(**kw)
     assert a == expected
+
+
+@pytest.mark.parametrize('input', [[1, 2, 2], (1, 2, 3), np.array([1, 2, 3])],
+                         ids=['list', 'tuple', 'npArray'])
+def test_maxAlongReturn_type(input):
+    a = maxAlongAxis(input, 3)
+    assert isinstance(a, type(input))
