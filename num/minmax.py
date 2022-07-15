@@ -2,20 +2,26 @@ import numpy as np
 from collections.abc import Iterable
 
 
-def maxAlongAxis(input, size, mode='reflect', cval=0.0, origin=0, keepType=True):
+def maxAlongAxis(input, size, mode='reflect', cval=0.0, origin=0):
     if not isinstance(input, Iterable):
-        input = list(input)
-        modifiedType = type(input)
+        raise ValueError('input value is not Iterable.')
+    modifiedType = type(input)
+    input = list(input)
     mapDict = {
         'reflect': reflectmode,
         'constant': constantmode,
         'nearest': nearestmode,
     }
-    postProcess = mapDict.get(mode)(input, size)
-    # TODO : Implement those 3 functions
+    args = locals()
+    postP = mapDict.get(mode)(**args)
+    c = int(size / 2)
+    at = [max(postP[i - c:i + c + 1]) for i in range(size, len(postP) - size)]
+
+    return modifiedType(at)
 
 
-def reflectmode(input: list, size: int) -> Iterable:
+def reflectmode(**args) -> Iterable:
+    input, size = args.get('input'), args.get('size')
     if size > len(input):
         raise ValueError(f'window of {size} larger than total input length.')
     g = input[0:size]
@@ -25,9 +31,17 @@ def reflectmode(input: list, size: int) -> Iterable:
     return g + input + d
 
 
-def constantmode(input: list, size: int, cval: float) -> Iterable:
-    pass
+def constantmode(*arg, **args) -> Iterable:
+    input, size = args.get('input'), args.get('size')
+    cval = args.get('cval')
+    if size > len(input):
+        raise ValueError(f'window of {size} larger than total input length.')
+    s = len(input[0:size])
+    g = [cval for _ in range(s)]
+    return g + input + g
 
 
-def nearestmode(input: list, size: int) -> Iterable:
-    pass
+def nearestmode(**args) -> Iterable:
+    input, size = args.get('input'), args.get('size')
+    g = [input[0] for _ in range(size)]
+    return g + input + g
