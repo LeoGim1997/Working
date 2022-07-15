@@ -17,10 +17,9 @@ def dirac(N: int = 64):
 
 @pytest.mark.parametrize('input', [short_x])
 def test_exception(input):
-    with pytest.raises(ValueError) as exc_info:
+    msg = 'wrong shape 1 for x. Must be a power of 2.'
+    with pytest.raises(ValueError, match=msg) as exc_info:
         fft(input)
-        assert exc_info.type is ValueError
-        assert exc_info.arg[0] == 'wrong shape 1 for x. Must be a power of 2.'
 
 
 @pytest.mark.parametrize('input', [normal_x])
@@ -57,7 +56,7 @@ def test_fft_firstvalue(func, N):
 @pytest.mark.parametrize('func,N', [(dirac, 32)])
 def test_fft_allvalues(func, N):
     tf = fft(func(N))
-    assert [np.abs(e) == pytest.approx(1, 10e3) for e in tf]
+    assert all([np.abs(e) == pytest.approx(1, 10e-3) for e in tf])
 
 
 @pytest.mark.parametrize('type',

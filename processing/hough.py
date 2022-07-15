@@ -50,17 +50,39 @@ def hough_line(img: np.array, theta=None) -> Tuple[Any]:
 
     y_indx, x_indx = np.nonzero(img)
     ndixs = y_indx.shape[0]
-    ntheta = theta.shape[0]
 
     ctheta = np.cos(theta)
     stheta = np.sin(theta)
 
     for i in range(ndixs):
         x, y = x_indx[i], y_indx[i]
-        for j in range(ntheta):
-            accum_idx = np.round(ctheta[j] * x + stheta[j] * y) + offset
+        for j, (ct, st) in enumerate(zip(ctheta, stheta)):
+            accum_idx = np.round(ct * x + st * y) + offset
             accum[int(accum_idx), j] += 1
     return accum, theta, bins
+
+
+def houghCirlce(img: np.array) -> Tuple[any]:
+    pass
+
+
+def showResult(image, accum, theta, bins) -> None:
+    fig, axes = plt.subplots(1, 2, figsize=(15, 6))
+    ax = axes.ravel()
+    ax[0].imshow(image, cmap='gray')
+    ax[0].set_title('Input image')
+    ax[0].set_axis_off()
+
+    ax[1].imshow(image, cmap='gray')
+    ax[1].set_ylim((image.shape[0], 0))
+    ax[1].set_axis_off()
+    ax[1].set_title('Detected lines')
+    # TODO : finish peak detection
+    for _, angle, dist in zip(*(accum, theta, bins)):
+        (x0, y0) = dist * np.array([np.cos(angle), np.sin(angle)])
+        ax[1].axline((x0, y0), slope=np.tan(angle + np.pi / 2))
+    plt.tight_layout()
+    plt.show()
 
 
 def show_hough_space(image: np.array) -> None:
