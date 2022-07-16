@@ -106,3 +106,9 @@ def test_maxAlong_value(kw, expected):
 def test_maxAlongReturn_type(input):
     a = maxAlongAxis(input, 3)
     assert isinstance(a, type(input))
+
+
+@pytest.mark.parametrize('input,expected', [([2, 8, 0, 4, 1, 9, 9, 0],
+                                             [8, 8, 8, 4, 9, 9, 9, 9])])
+def test_maxAlongAxis_value(input, expected):
+    assert maxAlongAxis(input, 3) == expected
