@@ -7,7 +7,7 @@ def maxAlongAxis(input, size, mode='reflect', cval=0.0):
     if not isinstance(input, Iterable):
         raise ValueError('input value is not Iterable.')
     modifiedType = type(input)
-    if not isinstance(modifiedType, (list, tuple)):
+    if not isinstance(input, (list, tuple)):
         modifiedType = np.array
     input = list(input)
     mapDict = {
