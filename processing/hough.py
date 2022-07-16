@@ -106,3 +106,7 @@ def show_hough_space(image: np.array) -> None:
     ax[1].axis('image')
     plt.tight_layout()
     plt.show()
+
+
+def houghLinePeak(hspace: Any) -> Tuple[Any]:
+    pass
