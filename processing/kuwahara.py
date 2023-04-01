@@ -49,10 +49,9 @@ def kuwaharaConvolution(img: np.array, hp: int = 2) -> np.array:
 
 def kuwahara_response(img: np.array, hp: int = 2) -> np.array:
     shape = img.shape
-    if len(shape) == 2:
-        return kuwaharaConvolution(img, hp=hp)
-    if len(shape) > 2:
+    if len(shape) >= 2:
         a = np.copy(img)
         for i in range(shape[-1]):
             a[..., i] = kuwaharaConvolution(img=img[..., i], hp=hp)
         return a
+    return kuwaharaConvolution(img, hp=hp)

@@ -2,6 +2,10 @@ import numpy as np
 from typing import Tuple, Any
 from im import MyImage
 import matplotlib.pyplot as plt
+import sys
+from pathlib import Path
+sys.path.append(Path(__file__).parents[1].as_posix())  # type : ignore
+from num.minmax import maxAlongImg
 
 
 def hough_line(img: np.array, theta=None) -> Tuple[Any]:

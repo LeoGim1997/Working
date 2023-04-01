@@ -1,6 +1,8 @@
 import pytest
 from num.minmax import *
 import numpy as np
+from numpy.testing import assert_equal
+
 
 l1 = [1, 2, 3]
 l2 = [1, 2, 5, 5, 5, 5]
@@ -112,3 +114,36 @@ def test_maxAlongReturn_type(input):
                                              [8, 8, 8, 4, 9, 9, 9, 9])])
 def test_maxAlongAxis_value(input, expected):
     assert maxAlongAxis(input, 3) == expected
+
+
+def imageFullones():
+    return np.ones((10, 10))
+
+
+def topCorner():
+    a = np.ones((20, 20))
+    a[0:3, 0:3] = 100
+    return a
+
+
+@pytest.mark.parametrize('args', [{'img': imageFullones(),
+                                   'axis': 1,
+                                   'size': 6,
+                                   'mode': 'constant',
+                                   'cval': 0}])
+def test_maxAlongImg(args):
+    a = maxAlongImg(**args)
+    assert isinstance(a, Iterable)
+    assert a.shape == args['img'].shape
+
+
+@pytest.mark.parametrize('args', [{'img': topCorner(),
+                                   'axis': 0,
+                                   'size': 6,
+                                   'mode': 'constant',
+                                   'cval': 0}])
+def test_maxtopCorner(args):
+    a = maxAlongImg(**args)
+    assert isinstance(a, Iterable)
+    assert a.shape == args['img'].shape
+    assert_equal(a[0:3, 0: args['size']], 100 * np.ones((3, args['size'])))

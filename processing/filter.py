@@ -1,5 +1,6 @@
 import numpy as np
 import sys
+import itertools as it
 from pathlib import Path
 sys.path.append(Path(__file__).parents[1].resolve().as_posix())
 from processing.gaussian import gaussian_kernel
@@ -96,10 +97,9 @@ def sobel_filter_vertical(img: np.array) -> np.array:
     Gy = image_padding(img, 1, fill_pad=False)
     img = np.zeros(np.shape(Gy))
     N, M = np.shape(Gy)
-    for i in range(1, N - 1):
-        for j in range(1, M - 1):
-            sub_matrix = Gy[i - 1:i + 2, j - 1:j + 2]
-            img[i, j] = np.sum(np.multiply(sub_matrix, filter))
+    for i, j in it.product(range(N), range(M)):
+        sub_matrix = Gy[i - 1:i + 2, j - 1:j + 2]
+        img[i, j] = np.sum(np.multiply(sub_matrix, filter))
     return img[1:-1, 1:-1]
 
 
