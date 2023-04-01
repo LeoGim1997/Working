@@ -145,7 +145,7 @@ class MyImage:
             "temple": dirImage / "Boxfilter_pavilion_original.jpg",
             "chessboard": dirImage / "chessboard_GRAY.png",
             "bbc": dirImage / "bbc-logo.jpeg",
-            "david": dirImage / "david.png",
+            "david": dirImage / f"david.png",
         }
         path = mapDict.get(self.name)
         if path is None:

@@ -8,10 +8,13 @@ Matrix = np.ndarray
 Vector = Iterable[float]
 
 SQRT_PI = np.sqrt(2 * np.pi)
-def CG(s: float): return 1 / (np.sqrt(s))
 
 
-def guassian_samplev2(l=5, std=1.) -> Vector:
+def CG(s: float):
+    return 1 / (np.sqrt(s))
+
+
+def guassian_samplev2(l=5, std=1.0) -> Vector:
     """Fast gaussian Sample generation
     Allows to quickly generates a gaussian x-vector
 
@@ -20,15 +23,14 @@ def guassian_samplev2(l=5, std=1.) -> Vector:
     std: float
 
     """
-    ax = np.linspace(-(l - 1) / 2., (l - 1) / 2., l)
+    ax = np.linspace(-(l - 1) / 2.0, (l - 1) / 2.0, l)
     gauss = np.exp(-0.5 * np.square(ax) / np.square(std))
     return np.reshape(gauss, (gauss.shape[0], 1))
 
 
-def gaussian_sample(std: float = 1,
-                    min: int = -3,
-                    max: int = 3,
-                    n_samples: int = 50) -> Vector:
+def gaussian_sample(
+    std: float = 1, min: int = -3, max: int = 3, n_samples: int = 50
+) -> Vector:
     """Return a 1-d Gaussian array.
     Allows for more spec for the desired output
     than `gaussian.guassian_samplev2`.
@@ -49,7 +51,7 @@ def gaussian_sample(std: float = 1,
 
     Notes
     -----
-    The shape of the output vector is (n_samples,1) 
+    The shape of the output vector is (n_samples,1)
     and not (n_samples,) for an easy reuse with numpy.dot
     to create matrix for instance.
 
@@ -83,7 +85,7 @@ def gaussian_kernel(std: float = 1, threshold: float = None, sf=None) -> Matrix:
             Gaussian kernel for convolution.
     """
     if std < 0:
-        raise ValueError('The std cannot be negative')
+        raise ValueError("The std cannot be negative")
     # haldf-witdh of the filter
     hw = floor(std) * 3
     w = 2 * hw + 1
@@ -101,7 +103,7 @@ def gaussian_kernel(std: float = 1, threshold: float = None, sf=None) -> Matrix:
         if sf is not None:
             scale_factor = 1 / np.average(m)
             m = scale_factor * m
-        kernel = m[c_x - cut:c_x + cut + 1, c_y - cut:c_y + cut + 1]
+        kernel = m[c_x - cut : c_x + cut + 1, c_y - cut : c_y + cut + 1]
         return kernel
     else:
         x = x[x[:, 0] > threshold, :]
@@ -113,8 +115,9 @@ def gaussian_kernel(std: float = 1, threshold: float = None, sf=None) -> Matrix:
         return kernel
 
 
-def laplacianOfGaussian(l: int = 5, std: float = 1.,
-                        threshold: float = None) -> Matrix:
+def laplacianOfGaussian(
+    l: int = 5, std: float = 1.0, threshold: float = None
+) -> Matrix:
     """Compute the Laplacian of gaussian.
     This function creates a LoG mask (matrix where values
     correpond to the laplacian of the gaussian mask.)

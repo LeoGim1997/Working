@@ -2,30 +2,33 @@ import numpy as np
 import sys
 import itertools as it
 from pathlib import Path
+
 sys.path.append(Path(__file__).parents[1].resolve().as_posix())
 from processing.gaussian import gaussian_kernel
 from scipy.signal import convolve2d
 
 
 def gaussian_blur(img: np.array, sigma: float = 1) -> np.array:
-    '''
+    """
     Apply a 7x7 gaussian blur on a img (default)
     on 1 channel of the input image
-    '''
+    """
     filter = gaussian_kernel(std=sigma)
     return convolve2d(img, filter, "same", "symm")
 
 
-def image_padding(img: np.array,
-                  half_pad: int = 4,
-                  fill_pad=False,
-                  defaultfill=1) -> np.array:
-    '''
+def image_padding(
+    img: np.array, half_pad: int = 4, fill_pad=False, defaultfill=1
+) -> np.array:
+    """
     Function returning a padded image use for convolution
     with a square fitler of half_with = half_pad.
     The center of the image will be the orginal image
-    '''
-    n, m = np.shape(img)
+    """
+    shape = np.shape(img)
+    if len(shape) < 2:
+        raise ValueError(f"Dimension of the input matrix must be at least 2.")
+    n, m = shape[0], shape[1]
     hw = half_pad
     # pad the image for fitting
     if defaultfill == 1:
@@ -72,9 +75,9 @@ def image_padding(img: np.array,
 
 
 def sobel_filter_horizontal(img: np.array) -> np.array:
-    '''
+    """
     Return the horizontal image gradient using Sobel convolution
-    '''
+    """
 
     filter = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]])
     Gx = image_padding(img, 1, fill_pad=False)
@@ -82,23 +85,23 @@ def sobel_filter_horizontal(img: np.array) -> np.array:
     N, M = np.shape(Gx)
     for i in range(1, N - 1):
         for j in range(1, M - 1):
-            sub_matrix = Gx[i - 1:i + 2, j - 1:j + 2]
+            sub_matrix = Gx[i - 1 : i + 2, j - 1 : j + 2]
             prod = np.multiply(sub_matrix, filter)
             img[i, j] = np.sum(prod)
     return img[1:-1, 1:-1]
 
 
 def sobel_filter_vertical(img: np.array) -> np.array:
-    '''
+    """
     Return the vertical image gradient using Sobel convolution
-    '''
+    """
 
     filter = np.array([[-1, -1, -1], [0, 0, 0], [1, 1, 1]])
     Gy = image_padding(img, 1, fill_pad=False)
     img = np.zeros(np.shape(Gy))
     N, M = np.shape(Gy)
     for i, j in it.product(range(N), range(M)):
-        sub_matrix = Gy[i - 1:i + 2, j - 1:j + 2]
+        sub_matrix = Gy[i - 1 : i + 2, j - 1 : j + 2]
         img[i, j] = np.sum(np.multiply(sub_matrix, filter))
     return img[1:-1, 1:-1]
 
