@@ -63,3 +63,17 @@ def ditheringFS(img: np.array, nc, case="normal") -> np.array:
         arr[i + 1, j] += quant_error * 5 / 16
         arr[i + 1, j + 1] += quant_error * 1 / 16
     return arr[1:-1, 1:-1]
+
+from im import MyImage
+a = MyImage('david')
+img = a.get_matrix()
+# MyImage.show(ditheringFS(img[...,0],4,'normal'))
+
+#fonction de mapping
+import numpy as np
+import matplotlib.pyplot as plt
+a = np.linspace(0,255,256)
+b = np.linspace(0,128,256)
+plt.figure()
+plt.plot(a,b)
+plt.show()
