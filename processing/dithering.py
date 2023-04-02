@@ -26,6 +26,11 @@ def ditheringFS(img: np.array, nc) -> np.array:
     width, height = img.shape
     maxitensite = np.max(img)
     newmapping = np.linspace(0, maxitensite, nc)
+    # Classical order for matrix exploration
+    # to it.product here will generate all the index of the 
+    # pixels starting from the top-left of the image to the
+    # bottom right of the image.
+    
     for i, j in it.product(range(width), range(height)):
         old_pixel = arr[i, j].copy()
         new_pixel = get_new_val(old_pixel, newmapping)
