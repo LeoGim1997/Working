@@ -1,6 +1,7 @@
 import numpy as np
 import itertools as it
 from filter import image_padding
+from typing import Iterable
 
 
 def get_new_val(old_val: float, newmapping: np.array):
@@ -12,7 +13,25 @@ def get_new_val(old_val: float, newmapping: np.array):
     return newmapping[idx]
 
 
-def ditheringFS(img: np.array, nc) -> np.array:
+def snakePath(n: int, m: int):
+    for i in range(n):
+        if i % 2 == 0:
+            col = range(0, m)
+        else:
+            col = range(-1, -m - 1, -1)
+        for j in col:
+            yield (i, j)
+
+
+def generatePath(case: str, n: int, m: int) -> Iterable:
+    match case:
+        case "normal":
+            return it.product(range(n), range(m))
+        case "snake":
+            return snakePath(n, m)
+
+
+def ditheringFS(img: np.array, nc, case="normal") -> np.array:
     """
     Use the Floyd-Steinberg (FS) algorithm to dither an image.
     The Algorithm of FS will act as follow:
@@ -27,11 +46,11 @@ def ditheringFS(img: np.array, nc) -> np.array:
     maxitensite = np.max(img)
     newmapping = np.linspace(0, maxitensite, nc)
     # Classical order for matrix exploration
-    # to it.product here will generate all the index of the 
+    # to it.product here will generate all the index of the
     # pixels starting from the top-left of the image to the
     # bottom right of the image.
-    
-    for i, j in it.product(range(width), range(height)):
+
+    for i, j in generatePath(case, width, height):
         old_pixel = arr[i, j].copy()
         new_pixel = get_new_val(old_pixel, newmapping)
         arr[i, j] = new_pixel
