@@ -52,7 +52,7 @@ def gray_scale_conv_1channel(img: np.array, channel=0) -> np.array:
             if pixel <= 0.04045:
                 pixel = pixel / float(12.92)
             if pixel > 0.04045:
-                pixel = ((pixel + 0.055) / float(1.055))**(2.4)
+                pixel = ((pixel + 0.055) / float(1.055)) ** (2.4)
     return img_1c
 
 
@@ -60,11 +60,16 @@ def gray_scale(img: np.array) -> np.array:
     norm = [0.2126, 0.7152, 0.0722]
     dim = np.shape(img)
     img2 = np.zeros((dim[0], dim[1]))
-    l_matrix = [value * gray_scale_conv_1channel(img, channel) for channel, value in enumerate(norm)]
+    l_matrix = [
+        value * gray_scale_conv_1channel(img, channel)
+        for channel, value in enumerate(norm)
+    ]
     for i in range(dim[0]):
         for j in range(dim[1]):
             p = l_matrix[0][i, j] + l_matrix[1][i, j] + l_matrix[2][i, j]
-            img2[i, j] = 12.92 * p if p <= 0.0031308 else (((p + 0.055) / 1.055))**(2.4)
+            img2[i, j] = (
+                12.92 * p if p <= 0.0031308 else (((p + 0.055) / 1.055)) ** (2.4)
+            )
     img_finale = np.ones((dim[0], dim[1], dim[2] + 1))
     return img_finale
 
@@ -73,22 +78,24 @@ def fast_rgb2grey(img: np.array) -> np.array:
     img = np.asarray(img)
 
     if len(img.shape) != 3:
-        raise ValueError(f'Wrong dim for input image. shape={img.shape}')
+        raise ValueError(f"Wrong dim for input image. shape={img.shape}")
     return np.dot(img[..., :3], [0.299, 0.587, 0.114])
 
 
-def rotating_image(img: np.array, axis='horizontal') -> np.array:
+def rotating_image(img: np.array, axis="horizontal") -> np.array:
     img_rotate = np.copy(img)
     dim = np.shape(img)
     center = int(dim[1] / 2)
-    if axis == 'center':
+    if axis == "center":
         for j in range(dim[1]):
             img_rotate[:, j] = img[:, -j]
-    if axis == 'horizontal':
+    if axis == "horizontal":
         for i in range(dim[0]):
             img_rotate[i, :] = img[-i, :]
-    if axis == 'diag':
-        img_rotate = rotating_image(rotating_image(img, axis='center'), axis='horizontal')
+    if axis == "diag":
+        img_rotate = rotating_image(
+            rotating_image(img, axis="center"), axis="horizontal"
+        )
     return img_rotate
 
 
@@ -119,38 +126,40 @@ def imageThreshold(img: np.array, th: float) -> np.array:
     a[a < 1] = 0
     return a
 
+
 # Easy image Load
 
 
 class MyImage:
-    def __init__(self, name='lena') -> None:
+    def __init__(self, name="lena") -> None:
         self.name = name
 
     def get_matrix(self, fullpath: str = None):
-        dirImage = Path(__file__).parents[1] / 'image_folder'
+        dirImage = Path(__file__).parents[1] / "image_folder"
         if fullpath is not None:
             return mpimg.imread(fullpath)
 
         mapDict = {
-            'lena': dirImage / 'lena.jpeg',
-            'house': dirImage / 'maison_alsacienne.jpeg',
-            'temple': dirImage / 'Boxfilter_pavilion_original.jpg',
-            'chessboard': dirImage / 'chessboard_GRAY.png',
-            'bbc': dirImage / 'bbc-logo.jpeg'
+            "lena": dirImage / "lena.jpeg",
+            "house": dirImage / "maison_alsacienne.jpeg",
+            "temple": dirImage / "Boxfilter_pavilion_original.jpg",
+            "chessboard": dirImage / "chessboard_GRAY.png",
+            "bbc": dirImage / "bbc-logo.jpeg",
+            "david": dirImage / f"david.png",
         }
         path = mapDict.get(self.name)
         if path is None:
-            raise FileExistsError(f'Image {path.as_posix()}')
+            raise FileExistsError(f"Image {path.as_posix()}")
         return mpimg.imread(path.resolve().as_posix())
 
     @staticmethod
-    def show(img: np.array, icmap='gray') -> None:
+    def show(img: np.array, icmap="gray") -> None:
         plt.figure()
         plt.imshow(img, cmap=icmap)
         plt.show()
 
     @staticmethod
-    def show_compare(img1: np.array, img2: np.array, icmap='gray') -> None:
+    def show_compare(img1: np.array, img2: np.array, icmap="gray") -> None:
         plt.figure()
         plt.subplot(1, 2, 1)
         plt.imshow(img1, cmap=icmap)
