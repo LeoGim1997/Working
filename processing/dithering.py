@@ -1,10 +1,15 @@
 import numpy as np
 import itertools as it
 from filter import image_padding
-from typing import Iterable
+from typing import Iterable,Tuple
+from enum import Enum
 
 
-def get_new_val(old_val: float, newmapping: np.array):
+class Direction(Enum):
+    POSITIVE = 1
+    NEGATIVE = -1
+
+def get_new_val(old_val: float, newmapping: np.array) -> float:
     """
     Small function to map a pixel value inside
     a new range of intensity value.
@@ -13,7 +18,14 @@ def get_new_val(old_val: float, newmapping: np.array):
     return newmapping[idx]
 
 
-def snakePath(n: int, m: int):
+def get_new_val_th(old_val : float,newmapping : np.array) -> float:
+    """
+    New way to get the new intensity value from a pixel with a
+    threshold effect.
+    """
+    pass
+
+def snakePath(n: int, m: int) -> Iterable[Tuple[int,int]]:
     for i in range(n):
         if i % 2 == 0:
             col = range(0, m)
@@ -30,8 +42,30 @@ def generatePath(case: str, n: int, m: int) -> Iterable:
         case "snake":
             return snakePath(n, m)
 
+def get_new_val_selector(case: str,old_val : float, newmapping :np.array) -> int:
+    match case:
+        case "normal":
+            return get_new_val(old_val,newmapping)
+        case "threshold":
+            return get_new_val_th(old_val,newmapping)
 
-def ditheringFS(img: np.array, nc, case="normal") -> np.array:
+def update_matrix(direction : Direction, arr : np.array,
+                  quant_error : float,i : int,j : int) -> None:
+    """
+    Update the matrix for multiple direction
+    """
+    if direction == Direction.POSITIVE:
+        arr[i, j + 1] += quant_error * 7 / 16
+        arr[i + 1, j - 1] += quant_error * 3 / 16
+        arr[i + 1, j] += quant_error * 5 / 16
+        arr[i + 1, j + 1] += quant_error * 1 / 16
+    if direction == Direction.NEGATIVE:
+        arr[i, j - 1] += quant_error * 7 / 16
+        arr[i + 1, j + 1] += quant_error * 3 / 16
+        arr[i + 1, j] += quant_error * 5 / 16
+        arr[i + 1, j - 1] += quant_error * 1 / 16
+
+def ditheringFS(img: np.array, nc, case="normal",newvaltype='normal') -> np.array:
     """
     Use the Floyd-Steinberg (FS) algorithm to dither an image.
     The Algorithm of FS will act as follow:
@@ -52,28 +86,18 @@ def ditheringFS(img: np.array, nc, case="normal") -> np.array:
 
     for i, j in generatePath(case, width, height):
         old_pixel = arr[i, j].copy()
-        new_pixel = get_new_val(old_pixel, newmapping)
+        new_pixel = get_new_val_selector(newvaltype,old_pixel,newmapping)
         arr[i, j] = new_pixel
         quant_error = old_pixel - new_pixel
         # Propagation of the quantification
         # error to next pixels inside the current
         # neigborhood.
-        arr[i, j + 1] += quant_error * 7 / 16
-        arr[i + 1, j - 1] += quant_error * 3 / 16
-        arr[i + 1, j] += quant_error * 5 / 16
-        arr[i + 1, j + 1] += quant_error * 1 / 16
-    return arr[1:-1, 1:-1]
-
-from im import MyImage
-a = MyImage('david')
-img = a.get_matrix()
-# MyImage.show(ditheringFS(img[...,0],4,'normal'))
-
-#fonction de mapping
-import numpy as np
-import matplotlib.pyplot as plt
-a = np.linspace(0,255,256)
-b = np.linspace(0,128,256)
-plt.figure()
-plt.plot(a,b)
-plt.show()
+        if case == 'normal':
+            direction = Direction.POSITIVE
+        if case == 'snake':
+            if j<0:
+                direction = Direction.NEGATIVE
+            else:
+                direction = Direction.POSITIVE
+        update_matrix(direction,arr,quant_error,i,j)
+    return arr[1:-1, 1:-2]
