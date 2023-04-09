@@ -1,6 +1,6 @@
 import numpy as np
 import itertools as it
-from filter import image_padding
+from .filter import image_padding
 from typing import Iterable,Tuple
 from enum import Enum
 
