@@ -16,8 +16,8 @@ class Dithering(Enum):
     the different type of dithering.
     """
 
-    FSdithering = 1  # Floyd-Steinberg
-    JJN = 1  # Jarvis, Judice, Ninke
+    FSdithering = "FS"  # Floyd-Steinberg
+    JJN = "JJN"  # Jarvis, Judice, Ninke
 
 
 def get_new_val(old_val: float, newmapping: np.array) -> float:
@@ -104,10 +104,11 @@ def dithering(
     nc,
     case="normal",
     newvaltype="normal",
-    dithering: Dithering = Dithering.FSdithering,
+    dithering: str = "FS",
 ) -> np.array:
     """
-    Use the Floyd-Steinberg (FS) algorithm to dither an image.
+    Main method for dithering algorithms to dither an image.
+    For now, dithering arg can only take 2 values 'FS' and 'JJN'
     The Algorithm of FS will act as follow:
         For each pixel a new value of intensity will
         be associated with a new value inside
@@ -140,5 +141,15 @@ def dithering(
                 direction = Direction.NEGATIVE
             else:
                 direction = Direction.POSITIVE
-        update_matrix(dithering, direction, arr, quant_error, i, j)
+        match dithering:
+            case "FS":
+                dtype = Dithering.FSdithering
+            case "JJN":
+                dtype = Dithering.JJN
+            case _:
+                raise ValueError(
+                    f"Incorrect type of dithering entered : {dithering}",
+                    f"valid values are FS and JJN.",
+                )
+        update_matrix(dtype, direction, arr, quant_error, i, j)
     return arr[1:-1, 1:-2]
