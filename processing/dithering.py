@@ -39,7 +39,7 @@ def get_new_val_th(old_val: float, newmapping: np.array) -> float:
 
 def snakePath(n: int, m: int) -> Iterable[Tuple[int, int]]:
     """
-    Small function to compute the iterator to go 
+    Small function to compute the iterator to go
     through the matrix.
     """
     for i in range(n):
@@ -50,6 +50,7 @@ def snakePath(n: int, m: int) -> Iterable[Tuple[int, int]]:
         for j in col:
             yield (i, j)
 
+
 def generatePath(case: str, n: int, m: int) -> Iterable:
     match case:
         case "normal":
@@ -57,12 +58,14 @@ def generatePath(case: str, n: int, m: int) -> Iterable:
         case "snake":
             return snakePath(n, m)
 
+
 def get_new_val_selector(case: str, old_val: float, newmapping: np.array) -> int:
     match case:
         case "normal":
             return get_new_val(old_val, newmapping)
         case "threshold":
             return get_new_val_th(old_val, newmapping)
+
 
 def update_matrix(
     dithering: Dithering,
@@ -111,7 +114,7 @@ def dithering(
     Main method for dithering algorithms to dither an image.
     2 method are implemented for now:
      - Floyd-Steinberg (FS)
-     - Jarvis, Judice, Ninke (JJN) \\ 
+     - Jarvis, Judice, Ninke (JJN) \\
     All the algorithms use the error diffusion method.
     Each process pixel will be quantifiy on a other grayscale
     encoded by the parameter `number of colors` nc.
@@ -127,7 +130,7 @@ def dithering(
         Default to normal, determine the path following
         for the pixel processing. If set to snake the path
         following will go from left to right and left to right.
-    newvaltype: Optionnal str 
+    newvaltype: Optionnal str
         for the new pixel selection.
     dithering: str
         Default to FS. Select the type of dithering to apply
