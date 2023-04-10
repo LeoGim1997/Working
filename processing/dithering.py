@@ -38,6 +38,10 @@ def get_new_val_th(old_val: float, newmapping: np.array) -> float:
 
 
 def snakePath(n: int, m: int) -> Iterable[Tuple[int, int]]:
+    """
+    Small function to compute the iterator to go 
+    through the matrix.
+    """
     for i in range(n):
         if i % 2 == 0:
             col = range(0, m)
