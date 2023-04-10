@@ -46,7 +46,6 @@ def snakePath(n: int, m: int) -> Iterable[Tuple[int, int]]:
         for j in col:
             yield (i, j)
 
-
 def generatePath(case: str, n: int, m: int) -> Iterable:
     match case:
         case "normal":
@@ -54,14 +53,12 @@ def generatePath(case: str, n: int, m: int) -> Iterable:
         case "snake":
             return snakePath(n, m)
 
-
 def get_new_val_selector(case: str, old_val: float, newmapping: np.array) -> int:
     match case:
         case "normal":
             return get_new_val(old_val, newmapping)
         case "threshold":
             return get_new_val_th(old_val, newmapping)
-
 
 def update_matrix(
     dithering: Dithering,
@@ -108,12 +105,33 @@ def dithering(
 ) -> np.array:
     """
     Main method for dithering algorithms to dither an image.
-    For now, dithering arg can only take 2 values 'FS' and 'JJN'
-    The Algorithm of FS will act as follow:
-        For each pixel a new value of intensity will
-        be associated with a new value inside
-        the new color range.
-        The error will be propagated to the following pixel.
+    2 method are implemented for now:
+     - Floyd-Steinberg (FS)
+     - Jarvis, Judice, Ninke (JJN) \\ 
+    All the algorithms use the error diffusion method.
+    Each process pixel will be quantifiy on a other grayscale
+    encoded by the parameter `number of colors` nc.
+
+    Parameters
+    ----------
+    img:np.array
+        A N*P input matrix image.
+    nc: int
+        Number of color inside the final image.
+    case: Optinnal str
+        Can take 2 value : normal of snake
+        Default to normal, determine the path following
+        for the pixel processing. If set to snake the path
+        following will go from left to right and left to right.
+    newvaltype: Optionnal str 
+        for the new pixel selection.
+    dithering: str
+        Default to FS. Select the type of dithering to apply
+        to the input image.
+    Returns
+    -------
+    img: np.array
+        output dithered image.
     """
     assert len(img.shape) == 2, f"Only n*p 1D chanel image are supported for now."
     half_pad = 1 if dithering == Dithering.FSdithering else 2
