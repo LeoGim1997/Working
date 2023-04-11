@@ -1,5 +1,4 @@
 import numpy as np
-from skimage.draw import line
 
 
 def im1(n: int = 5) -> np.array:
