@@ -50,6 +50,23 @@ def snakePath(n: int, m: int) -> Iterable[Tuple[int, int]]:
         for j in col:
             yield (i, j)
 
+def diagonal(n : int, m : int) ->Iterable[Tuple[int, int]]:
+    """
+    Small method to yield all the diagonal inside the input array
+    TODO : Continue to implement to make diagonal going in both sense
+    for now all the diagonal are oriented from the bottom to the up 
+    we need to alternate between each line bottom to up and up to bottom
+    etc ...
+    """
+    for i in range(n):
+        currline = i
+        col = 0
+        while currline >= 0 and col < m :
+            yield (currline,col)
+            currline = currline - 1
+            col = col + 1
+    yield (n-1,m-1)
+
 
 def generatePath(case: str, n: int, m: int) -> Iterable:
     match case:
