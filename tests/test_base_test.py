@@ -5,11 +5,11 @@ from im import MyImage
 
 @pytest.mark.Base
 @pytest.mark.parametrize(
-    "im1,im2,cmap",
-    [(MyImage("lena").get_matrix(), MyImage("lena").get_matrix(), "gray")],
+    "im1,cmap",
+    [("lena", "gray")],
 )
 def test_fig_creation(im1, im2, cmap):
-    figName = "LenaNoProcessing"
-    print(im1,im2)
-    Test.saveOutput(im1, im2)
-    assert (Test.outputPath / figName).exists()
+    figName,ext = "LenaNoProcessing","png"
+    lenamatrix = MyImage(im1).get_matrix()
+    Test.saveOutput(lenamatrix,lenamatrix,cmap=cmap,figName=figName)
+    assert (Test.outputPath / f"{figName}.{ext}").exists()

@@ -45,6 +45,8 @@ def kuwaharaConvolution(img: np.ndarray, hp: int = 2) -> np.ndarray:
     return img[hp:-hp, hp:-hp]
 
 
+
+
 def kuwahara_response(img: np.ndarray, hp: int = 2) -> np.ndarray:
     shape = img.shape
     if len(shape) > 2:
