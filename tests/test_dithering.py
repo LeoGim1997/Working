@@ -1,8 +1,4 @@
 import pytest
-import numpy as np
-import sys
-from base_test import Test
-sys.path.append(Test.processingPath.resolve().as_posix()) #type : ignore
 from dithering import snakePath
 
 

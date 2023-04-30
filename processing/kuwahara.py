@@ -1,6 +1,6 @@
 import numpy as np
-from filter import image_padding
-from im import MyImage
+from processing.filter import image_padding
+from processing.im import MyImage
 from typing import Iterator, Tuple
 
 
@@ -47,7 +47,7 @@ def kuwaharaConvolution(img: np.ndarray, hp: int = 2) -> np.ndarray:
 
 def kuwahara_response(img: np.ndarray, hp: int = 2) -> np.ndarray:
     shape = img.shape
-    if len(shape) >= 2:
+    if len(shape) > 2:
         a = np.copy(img)
         for i in range(shape[-1]):
             a[..., i] = kuwaharaConvolution(img=img[..., i], hp=hp)

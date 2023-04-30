@@ -26,7 +26,7 @@ def image_padding(
     The center of the image will be the orginal image
     """
     shape = np.shape(img)
-    if len(shape) < 2:
+    if not len(shape) >= 2:
         raise ValueError(f"Dimension of the input matrix must be at least 2.")
     n, m = shape[0], shape[1]
     hw = half_pad

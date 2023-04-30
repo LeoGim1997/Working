@@ -4,17 +4,16 @@ from pathlib import Path
 import numpy as np
 import pytest
 import sys
-from tests.base_test import Test
+from base_test import Test
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def lena_standard():
-    img = Path(__file__).parent / 'image_folder/Lena.jpeg'
-
+    img = Test.resourcePath / 'Lena.jpeg'
     return mpimg.imread(img.as_posix())
 
 def pytest_sessionstart(session):
-    sys.path.insert(0,Test.processingPath)
+    sys.path.insert(0,Test.processingPath.as_posix())
 
 @pytest.fixture(scope="session")
 def simple_path():
