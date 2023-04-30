@@ -133,7 +133,7 @@ def imageThreshold(img: np.array, th: float) -> np.array:
 class MyImage:
     def __init__(self, name="lena") -> None:
         self.name = name
-        self._dirImage  = Path(__file__).parents[1] / "image_folder"
+        self._dirImage  = Path(__file__).parents[1] / "resources"
 
     def get_matrix(self, fullpath: str = None):
         if fullpath is not None:

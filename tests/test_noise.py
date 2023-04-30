@@ -4,7 +4,7 @@ from pathlib import Path
 import sys
 import numpy as np
 sys.path.append(Path(__file__).parents[1].as_posix())
-from confest import lena_standard
+from conftest import lena_standard
 from processing.noise import gaussian_noise, noise
 
 

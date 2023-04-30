@@ -5,10 +5,6 @@ import numpy as np
 from im import fast_rgb2grey
 from gradient_filtering import compute_gradient
 
-img = plt.imread('/Users/leogimenez/Desktop/git_depo_local/Working/image/image_folder/tower.png')
-img_g = compute_gradient(fast_rgb2grey(img), operator='robert')
-
-
 def compute_energy(img_g: np.array) -> np.array:
     n, m = np.shape(img_g)
     seam_mat = np.copy(img_g)

@@ -2,9 +2,9 @@
 import matplotlib.image as mpimg
 from pathlib import Path
 import numpy as np
-from PIL import Image
 import pytest
-import matplotlib.pyplot as plt
+import sys
+from tests.base_test import Test
 
 
 @pytest.fixture(scope="session")
@@ -13,6 +13,8 @@ def lena_standard():
 
     return mpimg.imread(img.as_posix())
 
+def pytest_sessionstart(session):
+    sys.path.insert(0,Test.processingPath)
 
 @pytest.fixture(scope="session")
 def simple_path():
@@ -32,3 +34,4 @@ def simple_path():
             row[origin - (incr + 1)] = 1
             origin = origin - (incr + 1)
     return mat
+
