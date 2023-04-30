@@ -26,7 +26,7 @@ def test_kuwahara_couleur(image):
 @pytest.mark.integration
 @pytest.mark.parametrize('halfpad',(2,4,5,9,15))
 def test_multiple_halpad(halfpad):
-    imageMatrix = MyImage('lena').get_matrix()
+    imageMatrix = MyImage('david').get_matrix()
     testName = f'lena_kuwahara_hp={halfpad}'
     processed = kuwahara_response(imageMatrix,hp=2)
     Test.saveOutput(imageMatrix,processed,figName=testName)
