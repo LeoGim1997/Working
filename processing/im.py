@@ -133,19 +133,20 @@ def imageThreshold(img: np.array, th: float) -> np.array:
 class MyImage:
     def __init__(self, name="lena") -> None:
         self.name = name
-        self._dirImage  = Path(__file__).parents[1] / "resources"
+        self.dirImage  = Path(__file__).parents[1] / "resources"
 
     def get_matrix(self, fullpath: str = None):
         if fullpath is not None:
             return mpimg.imread(fullpath)
 
         mapDict = {
-            "lena": self._dirImage / "lena.jpeg",
-            "house": self._dirImage / "maison_alsacienne.jpeg",
-            "temple": self._dirImage / "Boxfilter_pavilion_original.jpg",
-            "chessboard": self._dirImage / "chessboard_GRAY.png",
-            "bbc": self._dirImage / "bbc-logo.jpeg",
-            "david": self._dirImage / f"david.png",
+            "lena": self.dirImage / "lena.jpeg",
+            "lena_couleur" : self.dirImage / "lena_couleur.jpeg",
+            "house": self.dirImage / "maison_alsacienne.jpeg",
+            "temple": self.dirImage / "Boxfilter_pavilion_original.jpg",
+            "chessboard": self.dirImage / "chessboard_GRAY.png",
+            "bbc": self.dirImage / "bbc-logo.jpeg",
+            "david": self.dirImage / f"david.png",
         }
         path = mapDict.get(self.name)
         if path is None:

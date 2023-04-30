@@ -13,6 +13,7 @@ def lena_standard():
     return mpimg.imread(img.as_posix())
 
 def pytest_sessionstart(session):
+    Test.outputPath.mkdir(exist_ok=True)
     sys.path.insert(0,Test.processingPath.as_posix())
 
 @pytest.fixture(scope="session")
