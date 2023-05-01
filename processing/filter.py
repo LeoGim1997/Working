@@ -1,10 +1,8 @@
 from __future__ import annotations
-import numpy as np
-import sys
-import itertools as it
-from pathlib import Path
 
-sys.path.append(Path(__file__).parents[1].resolve().as_posix())
+import itertools as it
+
+import numpy as np
 from gaussian import gaussian_kernel
 from scipy.signal import convolve2d
 
@@ -76,7 +74,7 @@ def image_padding(
 
 
 def sobel_filter_horizontal(img: np.ndarray) -> np.ndarray:
-    """Compute the horizontal image gradient 
+    """Compute the horizontal image gradient
     using Sobel convolution kernel.
 
     Parameters
@@ -101,7 +99,7 @@ def sobel_filter_horizontal(img: np.ndarray) -> np.ndarray:
 
 
 def sobel_filter_vertical(img: np.ndarray) -> np.ndarray:
-    """Compute thevertical image gradient 
+    """Compute thevertical image gradient
         using Sobel convolution kernel.
 
     Parameters
@@ -116,7 +114,7 @@ def sobel_filter_vertical(img: np.ndarray) -> np.ndarray:
     Gy = image_padding(img, 1, fill_pad=False)
     img = np.zeros(np.shape(Gy))
     N, M = np.shape(Gy)
-    for i, j in it.product(range(1,N-1), range(1,M-1)):
+    for i, j in it.product(range(1, N - 1), range(1, M - 1)):
         sub_matrix = Gy[i - 1 : i + 2, j - 1 : j + 2]
         img[i, j] = np.sum(np.multiply(sub_matrix, filter))
     return img[1:-1, 1:-1]
@@ -138,13 +136,13 @@ def normalized_sobel_filter(img: np.ndarray, threshold: int = 0) -> np.ndarray:
     """
     Gx = sobel_filter_horizontal(img)
     Gy = sobel_filter_vertical(img)
-    n,m = img.shape
+    n, m = img.shape
     if len(img.shape) != 2:
-        # TODO : Take into account the case of multi channel image. 
+        # TODO : Take into account the case of multi channel image.
         raise ValueError(f"Only 1D matrix are availaible for now.")
     img_f = np.abs(Gx) + np.abs(Gy)
     if threshold != 0:
-        for i,j in it.product(range(n),range(m)):
+        for i, j in it.product(range(n), range(m)):
             if img_f[i, j] < threshold:
                 img_f[i, j] = 0
             else:
