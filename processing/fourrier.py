@@ -112,7 +112,9 @@ def compute_dft_image(image: np.ndarray, inv=False) -> np.ndarray:
     return dft_final
 
 
-def compute_cosinus(freq: float, t_final: float, amp=1, nsamples=None) -> Tuple[np.ndarray, np.ndarray]:
+def compute_cosinus(
+    freq: float, t_final: float, amp=1, nsamples=None
+) -> Tuple[np.ndarray, np.ndarray]:
     """Generate array values of a cosine signal observed between
     0 and t_final.
     The output signal will be of the form:\\
@@ -130,7 +132,7 @@ def compute_cosinus(freq: float, t_final: float, amp=1, nsamples=None) -> Tuple[
     if nsamples:
         t = np.linspace(0, t_final, nsamples)
     else:
-        step = 1. / float(10 * freq)
+        step = 1.0 / float(10 * freq)
         t = np.arange(0, t_final, step)
     return t, amp * np.cos(2 * np.pi * freq * t)
 
@@ -139,12 +141,12 @@ def shift_frequency_row(image: np.ndarray) -> np.ndarray:
     N, M = np.shape(image)
     image_shifted = np.copy(image)
     if N % 2 == 0:
-        image_shifted[0:int(N / 2), :] = image[int(N / 2):, :]
-        image_shifted[int(N / 2) + 1:, :] = image[0:int(N / 2), :]
+        image_shifted[0 : int(N / 2), :] = image[int(N / 2) :, :]
+        image_shifted[int(N / 2) + 1 :, :] = image[0 : int(N / 2), :]
     else:
-        image_shifted[:int(N / 2) + 1, :] = image[int(N / 2):]
+        image_shifted[: int(N / 2) + 1, :] = image[int(N / 2) :]
         image_shifted[int(N / 2), :] = image[0, :]
-        image_shifted[int(N / 2) + 1:, :] = image[0:int(N / 2), :]
+        image_shifted[int(N / 2) + 1 :, :] = image[0 : int(N / 2), :]
     return image_shifted
 
 
@@ -152,12 +154,12 @@ def shift_frequency_col(image: np.ndarray) -> np.ndarray:
     N, M = np.shape(image)
     image_shifted = np.copy(image)
     if M % 2 == 0:
-        image_shifted[:, 0:int(M / 2)] = image[:, int(M / 2 + 1):]
-        image_shifted[:, int(M / 2) + 1:] = image[:, 0:int(M / 2)]
+        image_shifted[:, 0 : int(M / 2)] = image[:, int(M / 2 + 1) :]
+        image_shifted[:, int(M / 2) + 1 :] = image[:, 0 : int(M / 2)]
     else:
-        image_shifted[:, :int(M / 2) + 1] = image[:, int(M / 2):]
+        image_shifted[:, : int(M / 2) + 1] = image[:, int(M / 2) :]
         image_shifted[:, int(M / 2)] = image[:, 0]
-        image_shifted[:, int(M / 2) + 1:] = image[:, 0:int(M / 2)]
+        image_shifted[:, int(M / 2) + 1 :] = image[:, 0 : int(M / 2)]
     return image_shifted
 
 
@@ -194,19 +196,19 @@ def plot_dft_image(img: np.ndarray, superpose: bool = False) -> None:
     plt.figure()
     if superpose:
         plt.subplot(1, 2, 1)
-        plt.imshow(img, cmap='gray')
-        plt.title('Original Image')
+        plt.imshow(img, cmap="gray")
+        plt.title("Original Image")
         plt.subplot(1, 2, 2)
-        plt.imshow(np.log(module) + phase, cmap='gray')
-        plt.title('FT Transform in log scale of Image')
+        plt.imshow(np.log(module) + phase, cmap="gray")
+        plt.title("FT Transform in log scale of Image")
     else:
         plt.subplot(1, 3, 1)
-        plt.imshow(img, cmap='gray')
-        plt.title('Original Image')
+        plt.imshow(img, cmap="gray")
+        plt.title("Original Image")
         plt.subplot(1, 3, 2)
-        plt.imshow(np.log(module), cmap='gray')
-        plt.title('FT Transform in log scale of Image')
+        plt.imshow(np.log(module), cmap="gray")
+        plt.title("FT Transform in log scale of Image")
         plt.subplot(1, 3, 3)
-        plt.imshow(phase, cmap='gray')
-        plt.title('Phase of the FT (rad)')
+        plt.imshow(phase, cmap="gray")
+        plt.title("Phase of the FT (rad)")
     plt.show()

@@ -3,6 +3,7 @@ import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 def compute_energy(img_g: np.array) -> np.array:
     n, m = np.shape(img_g)
     seam_mat = np.copy(img_g)
@@ -20,7 +21,7 @@ def compute_energy(img_g: np.array) -> np.array:
                 else:
                     seam_mat[i, j] += seam_mat[i - 1, -2]
             else:
-                above_pixel = seam_mat[i - 1, j - 1:j + 2]
+                above_pixel = seam_mat[i - 1, j - 1 : j + 2]
                 rank = np.argmin(above_pixel)
                 seam_mat[i, j] += seam_mat[i - 1, j - (rank - 1)]
     return seam_mat
@@ -29,13 +30,13 @@ def compute_energy(img_g: np.array) -> np.array:
 def compute_path(seam, index):
     n, m = np.shape(seam)
     path_coor = []
-    neighbor = seam[-1, index - 1:index + 2]
+    neighbor = seam[-1, index - 1 : index + 2]
     for i in np.arange(-2, -n + 1, -1):
         pixel_coor, value = np.argmin(neighbor[i]), np.min(neighbor[i])
 
         path_coor.append((i, index - (pixel_coor - 1)))
         new_index = list(seam[i, :]).index(value)
-        neighbor = seam[i, new_index - 1:new_index + 2]
+        neighbor = seam[i, new_index - 1 : new_index + 2]
     return path_coor
 
 

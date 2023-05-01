@@ -3,8 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 
-def noise(image: np.array, noise_typ='s_p'):
-
+def noise(image: np.array, noise_typ="s_p"):
     if len(np.shape(image)) == 3:
         row, col, ch = np.shape(image)
     else:
@@ -45,14 +44,14 @@ def salt_and_peper_noise(*args, **kwargs):
         img_final (np.array): Image noised.
     """
     img = args[0]
-    alpha = kwargs.get('alpha', 0.8)
+    alpha = kwargs.get("alpha", 0.8)
     n, m = np.shape(img)
     max = np.max(img)
     img_final = np.copy(img)
     img_noise = np.random.uniform(0, 1, (n, m))
     for i in range(n):
         for j in range(m):
-            if (img_noise[i, j] < alpha):
+            if img_noise[i, j] < alpha:
                 img_final[i, j] = 0
             if (img_noise[i, j] < alpha / 2) and (img_noise[i, j] <= alpha):
                 img_final[i, j] = max
@@ -70,7 +69,7 @@ def gaussian_noise(*args, **kwargs) -> np.array:
         gauss (np.array): gaussian noise samples matrix.
     """
     img = args[0]
-    mean, sigma = kwargs.get('mean', 0), kwargs.get('sigma', 1)
+    mean, sigma = kwargs.get("mean", 0), kwargs.get("sigma", 1)
     n, m = np.shape(img)
     gauss = np.random.normal(mean, sigma, (n, m))
     return gauss

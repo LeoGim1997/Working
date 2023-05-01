@@ -22,7 +22,7 @@ def get_new_val_th(old_val: float, newmapping: np.ndarray) -> float:
     New way to get the new intensity value from a pixel with a
     threshold effect.
     """
-    #TODO : PlaceHolder need the finish to implement
+    # TODO : PlaceHolder need the finish to implement
     return 0.0
 
 
@@ -65,17 +65,19 @@ def generatePath(case: str, n: int, m: int) -> Iterator:
         case "snake":
             return snakePath(n, m)
         case _:
-            raise ValueError(f'Incorrect input case {case}.') 
+            raise ValueError(f"Incorrect input case {case}.")
 
 
-def get_new_val_selector(case: str, old_val: float, newmapping: np.ndarray) -> Union[int,float]:
+def get_new_val_selector(
+    case: str, old_val: float, newmapping: np.ndarray
+) -> Union[int, float]:
     match case:
         case "normal":
             return get_new_val(old_val, newmapping)
         case "threshold":
             return get_new_val_th(old_val, newmapping)
         case _:
-            raise ValueError(f'Incorrect case {case}.')
+            raise ValueError(f"Incorrect case {case}.")
 
 
 def update_matrix(

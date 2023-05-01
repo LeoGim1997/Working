@@ -85,7 +85,7 @@ def fast_rgb2grey(img: np.ndarray) -> np.ndarray:
     return np.dot(img[..., :3], [0.299, 0.587, 0.114])
 
 
-def rotating_image(img: np.ndarray, axis : str ="horizontal") -> np.ndarray:
+def rotating_image(img: np.ndarray, axis: str = "horizontal") -> np.ndarray:
     img_rotate = np.copy(img)
     dim = np.shape(img)
     center = int(dim[1] / 2)
@@ -134,9 +134,9 @@ def imageThreshold(img: np.ndarray, th: float) -> np.ndarray:
 
 
 class MyImage:
-    def __init__(self, name : str ="lena") -> None:
-        self.name : str = name
-        self.dirImage : Path  = Constants().ressourcePath
+    def __init__(self, name: str = "lena") -> None:
+        self.name: str = name
+        self.dirImage: Path = Constants().ressourcePath
 
     def get_matrix(self, fullpath: Optional[str] = None):
         if fullpath is not None:
@@ -144,7 +144,7 @@ class MyImage:
 
         mapDict = {
             "lena": self.dirImage / "lena.jpeg",
-            "lena_couleur" : self.dirImage / "lena_couleur.jpeg",
+            "lena_couleur": self.dirImage / "lena_couleur.jpeg",
             "house": self.dirImage / "maison_alsacienne.jpeg",
             "temple": self.dirImage / "Boxfilter_pavilion_original.jpg",
             "chessboard": self.dirImage / "chessboard_GRAY.png",

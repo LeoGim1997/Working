@@ -25,7 +25,7 @@ def plot_nomalized():
     for i in [2, 4, 8, 16]:
         response = np.array([G(w, i, wc=5) for w in w_vector])
         plt.plot(w_vector, np.abs(response))
-        legend += [f'n={i}']
+        legend += [f"n={i}"]
     plt.grid()
     plt.legend(legend)
     plt.show()
