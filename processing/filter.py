@@ -1,14 +1,15 @@
+from __future__ import annotations
 import numpy as np
 import sys
 import itertools as it
 from pathlib import Path
 
 sys.path.append(Path(__file__).parents[1].resolve().as_posix())
-from processing.gaussian import gaussian_kernel
+from gaussian import gaussian_kernel
 from scipy.signal import convolve2d
 
 
-def gaussian_blur(img: np.array, sigma: float = 1) -> np.array:
+def gaussian_blur(img: np.ndarray, sigma: float = 1) -> np.ndarray:
     """
     Apply a 7x7 gaussian blur on a img (default)
     on 1 channel of the input image
@@ -18,8 +19,8 @@ def gaussian_blur(img: np.array, sigma: float = 1) -> np.array:
 
 
 def image_padding(
-    img: np.array, half_pad: int = 4, fill_pad=False, defaultfill=1
-) -> np.array:
+    img: np.ndarray, half_pad: int = 4, fill_pad=False, defaultfill=1
+) -> np.ndarray:
     """
     Function returning a padded image use for convolution
     with a square fitler of half_with = half_pad.
@@ -74,11 +75,10 @@ def image_padding(
     return img_c
 
 
-def sobel_filter_horizontal(img: np.array) -> np.array:
+def sobel_filter_horizontal(img: np.ndarray) -> np.ndarray:
     """
     Return the horizontal image gradient using Sobel convolution
     """
-
     filter = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]])
     Gx = image_padding(img, 1, fill_pad=False)
     img = np.zeros(np.shape(Gx))
@@ -91,7 +91,7 @@ def sobel_filter_horizontal(img: np.array) -> np.array:
     return img[1:-1, 1:-1]
 
 
-def sobel_filter_vertical(img: np.array) -> np.array:
+def sobel_filter_vertical(img: np.ndarray) -> np.ndarray:
     """
     Return the vertical image gradient using Sobel convolution
     """
@@ -106,7 +106,7 @@ def sobel_filter_vertical(img: np.array) -> np.array:
     return img[1:-1, 1:-1]
 
 
-def normalized_sobel_filter(img: np.array, threshold: int = 0) -> np.array:
+def normalized_sobel_filter(img: np.ndarray, threshold: int = 0) -> np.ndarray:
     Gx = sobel_filter_horizontal(img)
     Gy = sobel_filter_vertical(img)
     n, m = np.shape(img)
