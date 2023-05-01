@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from function import compute_gradient 
+from gradient_filtering import compute_gradient 
 from im import remove_channels
 
 def plot_Sobel_processing(img : np.array, icmap: str = 'gray')-> np.array:
