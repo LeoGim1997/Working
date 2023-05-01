@@ -4,34 +4,34 @@ from processing.im import MyImage
 from typing import Iterator, Tuple
 
 
-def Q1(mat: np.ndarray) -> np.ndarray:
-    return mat[0:3, 0:3]
+def Q1(mat: np.ndarray, hp: int = 2) -> np.ndarray:
+    return mat[0 : hp + 1, 0 : hp + 1]
 
 
-def Q2(mat: np.ndarray) -> np.ndarray:
-    return mat[0:3, 2:]
+def Q2(mat: np.ndarray, hp: int = 2) -> np.ndarray:
+    return mat[0 : hp + 1, hp:]
 
 
-def Q3(mat: np.ndarray) -> np.ndarray:
-    return mat[2:, 2:]
+def Q3(mat: np.ndarray, hp: int = 2) -> np.ndarray:
+    return mat[hp:, hp:]
 
 
-def Q4(mat: np.ndarray) -> np.ndarray:
-    return mat[2:, 0:3]
+def Q4(mat: np.ndarray, hp: int = 2) -> np.ndarray:
+    return mat[hp:, 0 : hp + 1]
 
 
-def filterResponse(mat: np.ndarray) -> float:
+def filterResponse(mat: np.ndarray, hp: int = 2) -> float:
     mapDict = {1: Q1, 2: Q2, 3: Q3, 4: Q4}
     mat = np.asarray(mat)
     n, m = mat.shape
     if n != m:
         raise ValueError(f"Input ndarray is not square.")
-    if n == m != 5:
+    if n == m != 2*hp+1:
         raise ValueError(f"Input ndarray have wrong dim")
-    stdlist = [np.std(m) for m in (Q1(mat), Q2(mat), Q3(mat), Q4(mat))]
+    stdlist = [np.std(m) for m in (Q1(mat, hp), Q2(mat, hp), Q3(mat, hp), Q4(mat, hp))]
     max_sdt = np.argmin(stdlist)
     selectedQ = mapDict.get(max_sdt + 1)
-    return np.mean(selectedQ(mat),dtype=np.float16)
+    return np.mean(selectedQ(mat), dtype=np.float16)
 
 
 def kuwaharaConvolution(img: np.ndarray, hp: int = 2) -> np.ndarray:
@@ -41,10 +41,8 @@ def kuwaharaConvolution(img: np.ndarray, hp: int = 2) -> np.ndarray:
     for i in range(hp, N - hp):
         for j in range(hp, M - hp):
             sub_matrix = p_img[i - hp : i + hp + 1, j - hp : j + hp + 1]
-            img[i, j] = filterResponse(sub_matrix)
+            img[i, j] = filterResponse(sub_matrix,hp)
     return img[hp:-hp, hp:-hp]
-
-
 
 
 def kuwahara_response(img: np.ndarray, hp: int = 2) -> np.ndarray:

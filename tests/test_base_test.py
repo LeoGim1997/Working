@@ -8,8 +8,8 @@ from im import MyImage
     "im1,cmap",
     [("lena", "gray")],
 )
-def test_fig_creation(im1, im2, cmap):
+def test_fig_creation(im1, cmap):
     figName,ext = "LenaNoProcessing","png"
     lenamatrix = MyImage(im1).get_matrix()
-    Test.saveOutput(lenamatrix,lenamatrix,cmap=cmap,figName=figName)
+    Test.saveOutput(lenamatrix,lenamatrix,icmap=cmap,figName=figName)
     assert (Test.outputPath / f"{figName}.{ext}").exists()
