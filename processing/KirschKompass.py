@@ -1,12 +1,13 @@
-import numpy as np
-from scipy.signal import convolve2d
-from im import normalize
 import itertools as it
+from typing import Any, Callable, Iterator
+
 import matplotlib.pyplot as plt
-from typing import Iterator,Any,Callable
+import numpy as np
+from im import normalize
+from scipy.signal import convolve2d
 
 
-def g(orientation : int = 1) -> np.ndarray:
+def g(orientation: int = 1) -> np.ndarray:
     """Function to generate each direction
     of the Kirsch Compass.
 
@@ -42,8 +43,10 @@ def g(orientation : int = 1) -> np.ndarray:
         8: np.dot(g2, mirror),
     }
     if orientation not in mapDict:
-        raise ValueError(f'Wrong value for Kompass input orientation={orientation}.' 
-                         f'Must be between 0 and 8.')
+        raise ValueError(
+            f"Wrong value for Kompass input orientation={orientation}."
+            f"Must be between 0 and 8."
+        )
     return mapDict[orientation]
 
 
@@ -64,8 +67,8 @@ def kirschCompass(n: int = 8) -> Iterator:
         class <GeneratorType>
     >>> a = list(a))
     >>> print(a[0])
-        [[5, 5, 5], 
-        [-3, 0, -3], 
+        [[5, 5, 5],
+        [-3, 0, -3],
         [-3, -3, -3]]
     """
     return (g(z) for z in range(1, n + 1))
@@ -80,8 +83,8 @@ def show_result(img: np.ndarray) -> Any:
     plt.figure()
     for c in range(1, 9):
         plt.subplot(2, 4, c)
-        plt.imshow(apply1Compass(img, c), cmap='gray')
-        plt.title(f'g({c})')
+        plt.imshow(apply1Compass(img, c), cmap="gray")
+        plt.title(f"g({c})")
     plt.show()
 
 
@@ -114,6 +117,6 @@ def kirschEdge(image: np.ndarray) -> np.ndarray:
     all_mat = [convolve2d(im, g, "same", "symm") for g in kirschCompass()]
     edge = np.zeros((image.shape))
     n, m = im.shape
-    for i,j in it.product(range(n),range(m)):
+    for i, j in it.product(range(n), range(m)):
         edge[i, j] = max([all_mat[idx][i, j] for idx in range(0, 7)])
     return edge
