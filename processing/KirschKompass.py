@@ -18,14 +18,14 @@ def g(orientation : int = 1) -> np.ndarray:
     -----
     The mapping of the direction according to z
     is the following:
-    orientation = 1 : N
-    orientation = 2 : NW
-    orientation = 3 : W
-    orientation = 4 : SW
-    orientaton  = 5 : S
-    orientation = 6 : SE
-    orientation = 7 : E
-    orientation = 8 : NE
+    orientation = 1: N
+    orientation = 2: NW
+    orientation = 3: W
+    orientation = 4: SW
+    orientation = 5: S
+    orientation = 6: SE
+    orientation = 7: E
+    orientation = 8: NE
     """
     g1 = np.asarray([[5, 5, 5], [-3, 0, -3], [-3, -3, -3]])
     g2 = np.asarray([[5, 5, -3], [5, 0, -3], [-3, -3, -3]])
