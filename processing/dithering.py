@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 import itertools as it
-from typing import Iterable, Tuple
+from typing import Dict, Iterator, Set, Tuple, Union
 
 import numpy as np
 from enumeration import Direction, Dithering
 from filter import image_padding
 
 
-def get_new_val(old_val: float, newmapping: np.array) -> float:
+def get_new_val(old_val: float, newmapping: np.ndarray) -> float:
     """
     Small function to map a pixel value inside
     a new range of intensity value.
@@ -17,15 +17,16 @@ def get_new_val(old_val: float, newmapping: np.array) -> float:
     return newmapping[idx]
 
 
-def get_new_val_th(old_val: float, newmapping: np.array) -> float:
+def get_new_val_th(old_val: float, newmapping: np.ndarray) -> float:
     """
     New way to get the new intensity value from a pixel with a
     threshold effect.
     """
-    pass
+    #TODO : PlaceHolder need the finish to implement
+    return 0.0
 
 
-def snakePath(n: int, m: int) -> Iterable[Tuple[int, int]]:
+def snakePath(n: int, m: int) -> Iterator[Tuple[int, int]]:
     """
     Small function to compute the iterator to go
     through the matrix.
@@ -39,7 +40,7 @@ def snakePath(n: int, m: int) -> Iterable[Tuple[int, int]]:
             yield (i, j)
 
 
-def diagonal(n: int, m: int) -> Iterable[Tuple[int, int]]:
+def diagonal(n: int, m: int) -> Iterator[Tuple[int, int]]:
     """
     Small method to yield all the diagonal inside the input array
     TODO : Continue to implement to make diagonal going in both sense
@@ -57,26 +58,30 @@ def diagonal(n: int, m: int) -> Iterable[Tuple[int, int]]:
     yield (n - 1, m - 1)
 
 
-def generatePath(case: str, n: int, m: int) -> Iterable:
+def generatePath(case: str, n: int, m: int) -> Iterator:
     match case:
         case "normal":
             return it.product(range(n), range(m))
         case "snake":
             return snakePath(n, m)
+        case _:
+            raise ValueError(f'Incorrect input case {case}.') 
 
 
-def get_new_val_selector(case: str, old_val: float, newmapping: np.array) -> int:
+def get_new_val_selector(case: str, old_val: float, newmapping: np.ndarray) -> Union[int,float]:
     match case:
         case "normal":
             return get_new_val(old_val, newmapping)
         case "threshold":
             return get_new_val_th(old_val, newmapping)
+        case _:
+            raise ValueError(f'Incorrect case {case}.')
 
 
 def update_matrix(
     dithering: Dithering,
     direction: Direction,
-    arr: np.array,
+    arr: np.ndarray,
     quant_error: float,
     i: int,
     j: int,
@@ -110,12 +115,12 @@ def update_matrix(
 
 
 def dithering(
-    img: np.array,
+    img: np.ndarray,
     nc,
     case="normal",
     newvaltype="normal",
     dithering: str = "FS",
-) -> np.array:
+) -> np.ndarray:
     """
     Main method for dithering algorithms to dither an image.
     2 method are implemented for now:
@@ -127,7 +132,7 @@ def dithering(
 
     Parameters
     ----------
-    img:np.array
+    img:np.ndarray
         A N*P input matrix image.
     nc: int
         Number of color inside the final image.
@@ -143,7 +148,7 @@ def dithering(
         to the input image.
     Returns
     -------
-    img: np.array
+    img: np.ndarray
         output dithered image.
     """
     assert len(img.shape) == 2, f"Only n*p 1D chanel image are supported for now."
