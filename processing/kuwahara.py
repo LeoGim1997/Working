@@ -1,7 +1,5 @@
 import numpy as np
 from processing.filter import image_padding
-from processing.im import MyImage
-from typing import Iterator, Tuple
 
 
 def Q1(mat: np.ndarray, hp: int = 2) -> np.ndarray:
@@ -26,7 +24,7 @@ def filterResponse(mat: np.ndarray, hp: int = 2) -> float:
     n, m = mat.shape
     if n != m:
         raise ValueError(f"Input ndarray is not square.")
-    if n == m != 2*hp+1:
+    if n == m != 2 * hp + 1:
         raise ValueError(f"Input ndarray have wrong dim")
     stdlist = [np.std(m) for m in (Q1(mat, hp), Q2(mat, hp), Q3(mat, hp), Q4(mat, hp))]
     max_sdt = np.argmin(stdlist)
@@ -41,7 +39,7 @@ def kuwaharaConvolution(img: np.ndarray, hp: int = 2) -> np.ndarray:
     for i in range(hp, N - hp):
         for j in range(hp, M - hp):
             sub_matrix = p_img[i - hp : i + hp + 1, j - hp : j + hp + 1]
-            img[i, j] = filterResponse(sub_matrix,hp)
+            img[i, j] = filterResponse(sub_matrix, hp)
     return img[hp:-hp, hp:-hp]
 
 
