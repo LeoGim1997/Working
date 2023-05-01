@@ -1,12 +1,15 @@
+from pathlib import Path
+from typing import Optional
+
+import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.image as mpimg
-from pathlib import Path
+from constants import Constants
 
 # Basic image processing
 
 
-def remove_channels(img: np.array, channels: int) -> np.array:
+def remove_channels(img: np.ndarray, channels: int) -> np.ndarray:
     img_c = np.copy(img)
     shape = np.shape(img)
     width = shape[0]
@@ -17,7 +20,7 @@ def remove_channels(img: np.array, channels: int) -> np.array:
     return img_c
 
 
-def addition_component(img: np.array):
+def addition_component(img: np.ndarray):
     img_c = np.copy(img)
     shape = np.shape(img)
     width = shape[0]
@@ -28,11 +31,11 @@ def addition_component(img: np.array):
     return img_c
 
 
-def normalize(img: np.array) -> np.array:
+def normalize(img: np.ndarray) -> np.ndarray:
     return (img - np.min(img)) / (np.max(img) - np.min(img))
 
 
-def integral_image_recursive_1channel(img: np.array) -> np.array:
+def integral_image_recursive_1channel(img: np.ndarray) -> np.ndarray:
     shape = np.shape(img)
     width = shape[0]
     height = shape[1]
@@ -45,7 +48,7 @@ def integral_image_recursive_1channel(img: np.array) -> np.array:
     return I
 
 
-def gray_scale_conv_1channel(img: np.array, channel=0) -> np.array:
+def gray_scale_conv_1channel(img: np.ndarray, channel=0) -> np.ndarray:
     img_1c = normalize(img[:, :, channel])
     for row in img_1c:
         for pixel in row:
@@ -56,7 +59,7 @@ def gray_scale_conv_1channel(img: np.array, channel=0) -> np.array:
     return img_1c
 
 
-def gray_scale(img: np.array) -> np.array:
+def gray_scale(img: np.ndarray) -> np.ndarray:
     norm = [0.2126, 0.7152, 0.0722]
     dim = np.shape(img)
     img2 = np.zeros((dim[0], dim[1]))
@@ -74,7 +77,7 @@ def gray_scale(img: np.array) -> np.array:
     return img_finale
 
 
-def fast_rgb2grey(img: np.array) -> np.array:
+def fast_rgb2grey(img: np.ndarray) -> np.ndarray:
     img = np.asarray(img)
 
     if len(img.shape) != 3:
@@ -82,7 +85,7 @@ def fast_rgb2grey(img: np.array) -> np.array:
     return np.dot(img[..., :3], [0.299, 0.587, 0.114])
 
 
-def rotating_image(img: np.array, axis="horizontal") -> np.array:
+def rotating_image(img: np.ndarray, axis : str ="horizontal") -> np.ndarray:
     img_rotate = np.copy(img)
     dim = np.shape(img)
     center = int(dim[1] / 2)
@@ -99,7 +102,7 @@ def rotating_image(img: np.array, axis="horizontal") -> np.array:
     return img_rotate
 
 
-def imageThreshold(img: np.array, th: float) -> np.array:
+def imageThreshold(img: np.ndarray, th: float) -> np.ndarray:
     """Threshold the input image
     this function take the input threshold to binarize
     the image and returns a copy
@@ -107,15 +110,15 @@ def imageThreshold(img: np.array, th: float) -> np.array:
     Parameters
     ----------
 
-    img: np.array
+    img: np.ndarray
         The input image as an array.
-    th: np.array
+    th: np.ndarray
         the selected threshold.
 
     Returns
     -------
 
-    img: np.array
+    img: np.ndarray
         the thresholded image.
 
     Notes:
@@ -131,11 +134,11 @@ def imageThreshold(img: np.array, th: float) -> np.array:
 
 
 class MyImage:
-    def __init__(self, name="lena") -> None:
-        self.name = name
-        self.dirImage  = Path(__file__).parents[1] / "resources"
+    def __init__(self, name : str ="lena") -> None:
+        self.name : str = name
+        self.dirImage : Path  = Constants().ressourcePath
 
-    def get_matrix(self, fullpath: str = None):
+    def get_matrix(self, fullpath: Optional[str] = None):
         if fullpath is not None:
             return mpimg.imread(fullpath)
 
@@ -149,18 +152,18 @@ class MyImage:
             "david": self.dirImage / f"david.png",
         }
         path = mapDict.get(self.name)
-        if path is None:
-            raise FileExistsError(f"Image {path.as_posix()} do not exists.")
+        if not path:
+            raise FileExistsError(f"Image with name {self.name} do not exists.")
         return mpimg.imread(path.resolve().as_posix())
 
     @staticmethod
-    def show(img: np.array, icmap="gray") -> None:
+    def show(img: np.ndarray, icmap="gray") -> None:
         plt.figure()
         plt.imshow(img, cmap=icmap)
         plt.show()
 
     @staticmethod
-    def show_compare(img1: np.array, img2: np.array, icmap="gray") -> None:
+    def show_compare(img1: np.ndarray, img2: np.ndarray, icmap="gray") -> None:
         plt.figure()
         plt.subplot(1, 2, 1)
         plt.imshow(img1, cmap=icmap)

@@ -1,23 +1,11 @@
-import numpy as np
+from __future__ import annotations
+
 import itertools as it
-from filter import image_padding
 from typing import Iterable, Tuple
-from enum import Enum
 
-
-class Direction(Enum):
-    POSITIVE = 1
-    NEGATIVE = -1
-
-
-class Dithering(Enum):
-    """
-    Enum class to represent
-    the different type of dithering.
-    """
-
-    FSdithering = "FS"  # Floyd-Steinberg
-    JJN = "JJN"  # Jarvis, Judice, Ninke
+import numpy as np
+from enumeration import Direction, Dithering
+from filter import image_padding
 
 
 def get_new_val(old_val: float, newmapping: np.array) -> float:
@@ -50,22 +38,23 @@ def snakePath(n: int, m: int) -> Iterable[Tuple[int, int]]:
         for j in col:
             yield (i, j)
 
-def diagonal(n : int, m : int) ->Iterable[Tuple[int, int]]:
+
+def diagonal(n: int, m: int) -> Iterable[Tuple[int, int]]:
     """
     Small method to yield all the diagonal inside the input array
     TODO : Continue to implement to make diagonal going in both sense
-    for now all the diagonal are oriented from the bottom to the up 
+    for now all the diagonal are oriented from the bottom to the up
     we need to alternate between each line bottom to up and up to bottom
     etc ...
     """
     for i in range(n):
         currline = i
         col = 0
-        while currline >= 0 and col < m :
-            yield (currline,col)
+        while currline >= 0 and col < m:
+            yield (currline, col)
             currline = currline - 1
             col = col + 1
-    yield (n-1,m-1)
+    yield (n - 1, m - 1)
 
 
 def generatePath(case: str, n: int, m: int) -> Iterable:
