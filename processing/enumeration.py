@@ -9,6 +9,5 @@ class Dithering(Enum):
     Enum class to represent
     the different type of dithering.
     """
-
     FSdithering = "FS"  # Floyd-Steinberg
     JJN = "JJN"  # Jarvis, Judice, Ninke
