@@ -1,6 +1,7 @@
 # Generate Image for testing
 import matplotlib.image as mpimg
 from pathlib import Path
+import os
 import numpy as np
 import pytest
 import sys
@@ -14,6 +15,8 @@ def lena_standard():
 
 def pytest_sessionstart(session):
     Test.outputPath.mkdir(exist_ok=True)
+    #You never know, might be usefull.
+    os.environ["__DEBUG__"] = "1"
     sys.path.insert(0,Test.processingPath.as_posix())
 
 @pytest.fixture(scope="session")

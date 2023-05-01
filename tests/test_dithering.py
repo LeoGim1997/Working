@@ -9,8 +9,3 @@ from dithering import snakePath,diagonal
 def test_generator(n,m,gen):
     a = tuple(snakePath(n,m))
     assert a == gen
-
-@pytest.mark.parametrize('n m gen',())
-def test_diagonal(n,m,gen):
-    a = tuple(diagonal(n,m))
-    assert a == gen

@@ -2,8 +2,6 @@ import numpy as np
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
-from im import fast_rgb2grey
-from gradient_filtering import compute_gradient
 
 def compute_energy(img_g: np.array) -> np.array:
     n, m = np.shape(img_g)
